@@ -10,7 +10,6 @@ BrowserID = require('../'),
 IdP = require('./lib/idp.js').IdP;
 
 describe('.well-known lookup', function() {
-  // var verifier = new Verifier({});
   var idp = new IdP();
 
   var browserid = new BrowserID({
@@ -23,11 +22,13 @@ describe('.well-known lookup', function() {
     idp.start(done);
   });
 
-  // now let's test!
   it('should work an over-ridden HTTP implementation', function(done) {
     browserid.lookup('example.com', function(err, details) {
       should.not.exist(err);
-      (details.disabled).should.equal(true);
+      details.disabled.should.equal(true);
+      details.delegationChain.should.be.instanceof(Array).and.have.lengthOf(1);
+      details.delegationChain[0].should.equal('example.com');
+      details.authoritativeDomain.should.equal('example.com');
       done(err);
     });
   });
