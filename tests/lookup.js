@@ -21,6 +21,12 @@ describe('.well-known lookup', function() {
     disabled: true,
   });
 
+  // an idp that HTTP redirects
+  var redirectidp = new IdP({
+    http_redirect: 'example.com'
+  });
+
+
   // a client library instance which ignores invalid SSL certs, and
   // only tolerates a 100ms delay in HTTP requests
   // (XXX: too fast for travis?)
@@ -44,6 +50,9 @@ describe('.well-known lookup', function() {
       },
       function(cb) {
         disabledidp.start(cb);
+      },
+      function(cb) {
+        redirectidp.start(cb);
       }
     ], done);
   });
@@ -79,6 +88,14 @@ describe('.well-known lookup', function() {
     });
   });
 
+  it('should refuse to follow http redirects', function(done) {
+    browserid.lookup(redirectidp.domain(), function(err) {
+      should.exist(err);
+      err.should.endWith('is not a browserid primary - redirection not supported for support documents');
+      done(null);
+    });
+  });
+
   it('test idp should shut down', function(done) {
     async.parallel([
       function(cb) {
@@ -86,6 +103,9 @@ describe('.well-known lookup', function() {
       },
       function(cb) {
         disabledidp.stop(cb);
+      },
+      function(cb) {
+        redirectidp.stop(cb);
       }
     ], done);
   });

@@ -60,10 +60,15 @@ IdP.prototype.start = function(cb) {
       return res.send(404);
     }
 
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    if (self.args.disabled) {
+    if (self.args.http_redirect) {
+      var location = 'https://' + self.args.http_redirect + '/.well-known/browserid';
+      res.writeHead(301, {'Location': location});
+      res.end();
+    } else if (self.args.disabled) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
       res.end(JSON.stringify({disabled: true}));
     } else {
+      res.writeHead(200, {'Content-Type': 'application/json'});
       res.end(JSON.stringify({
         authentication: '/auth.html',
         provisioning: '/prov.html',
