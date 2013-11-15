@@ -12,7 +12,6 @@ The library has the following scope and features:
   * **.well-known document parsing**
   * **(multiple) secondary IdP support** - The library can be initialized with a set of trusted "fallback IdPs" that are considered authoritative when lookup fails (no support document can be found).
   * **external HTTP implementation** - You can use node.js's http implementation, or override it and support your own (useful for HTTP proxied environments)
-  * **authority delegation override** - One may pass in an equivalency map to manually delgate a domain's authority without that domain hosting a .well-known document. (this is required for the "identity bridging" feature currently in persona).
   * **command line tools** - all of these features are exposed via command line tools for manual inspection of domain's persona configuration.
   * **assertion verification** - the features above all fuel a simple yet flexible API for local verification of assertions.
 
