@@ -80,12 +80,12 @@ Or you can allocate a library instance.  This allows you to specify configuratio
 
 The BrowserID class emits events:
 
-   var b = new BrowserID({ httpTimeout: 20.0 });
-
-   b.on('info', function() {
-     console.log('got some 411', arguments);
-   });
-
-   b.lookup("mozilla.org", function(err, details) {
-     // ...
-   });
+    var b = new BrowserID({ httpTimeout: 20.0 });
+    
+    b.on('info', function() {
+      console.log('got some 411', arguments);
+    });
+    
+    b.lookup("mozilla.org", function(err, details) {
+      // ...
+    });
