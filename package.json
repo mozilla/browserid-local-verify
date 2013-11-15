@@ -21,6 +21,6 @@
     "temp": "0.5.1"
   },
   "scripts": {
-    "test": "mocha -R spec tests/"
+    "test": "mocha -R spec tests/*.js"
   }
 }
