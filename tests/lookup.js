@@ -6,22 +6,28 @@
 
 const
 should = require('should'),
-browserid = require('../'),
+BrowserID = require('../'),
 IdP = require('./lib/idp.js').IdP;
 
 describe('.well-known lookup', function() {
   // var verifier = new Verifier({});
-  var idp = new IdP({});
+  var idp = new IdP();
+
+  var browserid = new BrowserID({
+    httpRequest: function(domain, path, cb) {
+      cb(null, 200, { 'Content-Type': 'application/json' } , '{ "disabled": true }');
+    }
+  });
 
   it('test idp should start up', function(done) {
     idp.start(done);
   });
 
   // now let's test!
-  it('should work with the built in HTTP implementation', function(done) {
-    browserid.lookup(idp.domain(), function(err, details) {
+  it('should work an over-ridden HTTP implementation', function(done) {
+    browserid.lookup('example.com', function(err, details) {
       should.not.exist(err);
-      console.log(details);
+      (details.disabled).should.equal(true);
       done(err);
     });
   });

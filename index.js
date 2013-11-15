@@ -29,7 +29,7 @@ Verifier.prototype.lookup = function(domain, cb) {
   lookup(this.args, this, domain, cb);
 };
 
-exports.Verifier = Verifier;
+module.exports = Verifier;
 
 exports.lookup = function(args, domain, cb) {
   // support ommission of args param
