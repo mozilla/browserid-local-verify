@@ -7,33 +7,20 @@
 const
 should = require('should'),
 Verifier = require('../').Verifier,
-Secondary = require('./lib/secondary.js').Secondary;
+IdP = require('./lib/idp.js').IdP;
 
 describe('.well-known discovery', function() {
-  // for this test we'll need a verifier instance
   var verifier = new Verifier({});
+  var idp = new IdP({});
 
-  // and a new sample secondary
-  var secondary = new Secondary({});
-
-  // note, this is very low level testing of the verification library,
-  // perhaps we can break it into a different test file
-  it('should start with allocation of a new verifier', function(done) {
-    should.exist(verifier);
-    (verifier).should.be.type('object');
-    done();
+  it('test idp should start up', function(done) {
+    idp.start(done);
   });
 
-  // note, this is testing some of the testing infrastructure, perhaps
-  // can be in a distinct 'test-secondary.js' file.
-  it('should start with allocation of a new secondary', function(done) {
-    should.exist(secondary);
-    secondary.start(function(err, details) {
-      should.not.exist(err);
-      // XXX: verify details available through secondary and
-      // through function calls on secondary
-      (details).should.be.type('object');
-      done();
-    });
-  })
+  // now let's test!
+  // XXX
+
+  it('test idp should shut down', function(done) {
+    idp.stop(done);
+  });
 });
