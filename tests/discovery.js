@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-// jshinting (syntax checking) of the source
+/* global describe,it */
 
 const
 should = require('should'),
@@ -10,7 +10,7 @@ Verifier = require('../').Verifier,
 IdP = require('./lib/idp.js').IdP;
 
 describe('.well-known discovery', function() {
-  var verifier = new Verifier({});
+  // var verifier = new Verifier({});
   var idp = new IdP({});
 
   it('test idp should start up', function(done) {

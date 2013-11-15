@@ -32,12 +32,12 @@ function later(cb /* args */) {
   });
 }
 
-IdP.prototype.url = function(cb) {
+IdP.prototype.url = function() {
   if (!this._started) throw "IdP isn't started, it has no url";
   return this.details.url;
 };
 
-IdP.prototype.publicKey = function(cb) {
+IdP.prototype.publicKey = function() {
   if (!this._started) throw "IdP isn't started, it has no url";
   return this.details.publicKey;
 };

@@ -2,20 +2,18 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-// jshinting (syntax checking) of the source
+/* global describe,it */
+
+// syntax checking of the source
 
 const
 should = require('should'),
 fs = require('fs'),
 path = require('path'),
 jshint = require('jshint').JSHINT,
-walk = require('walk');
-
-function jshintFormatter(errors) {
-  return errors.map(function(e) {
-    return e.error.reason + ' ' + e.file + ':' + e.error.line;
-  });
-}
+walk = require('walk'),
+async = require('async'),
+util = require('util');
 
 describe('source code syntax', function() {
   // read jshintrc
@@ -32,16 +30,21 @@ describe('source code syntax', function() {
   ];
 
   it('we should be able to discover files to lint', function(done) {
-    var walker = walk.walkSync(path.join(__dirname, '../lib'), {});
+    async.each([
+      path.join(__dirname, '../lib'),
+      __dirname
+    ], function(dir, done) {
+      var walker = walk.walk(dir, {});
 
-    walker.on("file", function(root, fStat, next) {
-      var f = path.join(root, fStat.name);
-      if (/\.js$/.test(f)) {
-        filesToLint.push(f);
-      }
-      next();
-    });
-    walker.on("end", done);
+      walker.on("file", function(root, fStat, next) {
+        var f = path.join(root, fStat.name);
+        if (/\.js$/.test(f)) {
+          filesToLint.push(f);
+        }
+        next();
+      });
+      walker.on("end", done);
+    }, done);
   });
 
   it('syntax checking should yield no errors', function(done) {
