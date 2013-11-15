@@ -9,7 +9,7 @@ should = require('should'),
 Verifier = require('../').Verifier,
 IdP = require('./lib/idp.js').IdP;
 
-describe('.well-known discovery', function() {
+describe('.well-known lookup', function() {
   // var verifier = new Verifier({});
   var idp = new IdP({});
 
