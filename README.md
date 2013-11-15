@@ -54,18 +54,18 @@ XXX: more to come, this is just a strawthing so far.
 
 To configure the library you can either pass an object as the first parameter to a supported function:
 
-   browserid.lookup({ httpProxy: 'http://example.com:8080' }, "mozilla.org", function(err, details) {
-     ...
-   });
+    browserid.lookup({ httpProxy: 'http://example.com:8080' }, "mozilla.org", function(err, details) {
+      ...
+    });
 
 Or you can allocate a library instance.  This allows you to specify configuration once at instantiation time:
 
-   var BrowserID = require('browserid-local-verify');
-
-   var b = new BrowserID({ httpTimeout: 20.0 });
-   b.lookup("mozilla.org", function(err, details) {
-     // ...
-   });
+    var BrowserID = require('browserid-local-verify');
+    
+    var b = new BrowserID({ httpTimeout: 20.0 });
+    b.lookup("mozilla.org", function(err, details) {
+      // ...
+    });
 
 ## knobs and switches:
 
