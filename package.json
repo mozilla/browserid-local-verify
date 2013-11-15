@@ -1,0 +1,26 @@
+{
+  "author": "Lloyd <lloyd@hilaiel.com> (http://lloyd.io)",
+  "name": "persona-verifier-lib",
+  "description": "A node.js verification library for verification of Persona assertions.",
+  "version": "0.0.1",
+  "repository": {
+    "url": "https://github.com/mozilla/persona-verifier-lib"
+  },
+  "main": "clortho",
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "dependencies": {
+    "jwcrypto": "0.4.4"
+  },
+  "devDependencies": {
+    "mocha": "1.14.0",
+    "should": "2.1.0",
+    "jshint": "2.3.0",
+    "walk": "2.2.1",
+    "temp": "0.5.1"
+  },
+  "scripts": {
+    "test": "mocha -R spec tests/"
+  }
+}
