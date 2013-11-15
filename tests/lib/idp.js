@@ -22,7 +22,9 @@ require("jwcrypto/lib/algs/rs");
 require("jwcrypto/lib/algs/ds");
 
 function IdP(args) {
+  if (!args) args = {};
   this.args = args;
+  if (!this.args.delay) this.args.delay = 0;
 }
 
 function later(cb /* args */) {
@@ -53,6 +55,23 @@ IdP.prototype.start = function(cb) {
 
   var self = this;
 
+  function handleRequest(req,res) {
+    if (req.url.indexOf('/.well-known/browserid') !== 0) {
+      return res.send(404);
+    }
+
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    if (self.args.disabled) {
+      res.end(JSON.stringify({disabled: true}));
+    } else {
+      res.end(JSON.stringify({
+        authentication: '/auth.html',
+        provisioning: '/prov.html',
+        "public-key": self.publicKey().toSimpleObject()
+      }));
+    }
+  }
+
   async.parallel([
     function(cb) {
       // spin up an HTTPS server bound to an ephemeral port
@@ -61,16 +80,9 @@ IdP.prototype.start = function(cb) {
         key: fs.readFileSync(path.join(__dirname, '..', 'resources', 'key.pem')),
         cert: fs.readFileSync(path.join(__dirname, '..', 'resources', 'cert.pem'))
       }, function (req, res) {
-        // XXX: we will need a lot of flexibility in sent responses
-        if (req.url.indexOf('/.well-known/browserid') !== 0) {
-          return res.send(404);
-        }
-
-        if (self.args.disabled) {
-          res.writeHead(200, {'Content-Type': 'application/json'});
-          res.end(JSON.stringify({disabled: true}));
-        }
-
+        setTimeout(function() {
+          handleRequest(req, res);
+        }, self.args.delay * 1000);
       }).listen(0, '127.0.0.1', function() {
         cb(null);
       });

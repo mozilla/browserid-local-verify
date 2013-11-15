@@ -7,32 +7,54 @@
 const
 should = require('should'),
 BrowserID = require('../'),
-IdP = require('./lib/idp.js').IdP;
+IdP = require('./lib/idp.js').IdP,
+async = require('async');
 
 describe('.well-known lookup', function() {
-  var idp = new IdP({ disabled: true });
-
-  var browserid = new BrowserID({
-    insecureSSL: true
+  // a local idp with a 1s delay in serving support documents
+  var slowidp = new IdP({
+    delay: 1.0
   });
 
+  // a local idp that serves disabled support documents
+  var disabledidp = new IdP({
+    disabled: true,
+  });
+
+  // a client library instance which ignores invalid SSL certs, and
+  // only tolerates a 100ms delay in HTTP requests
+  // (XXX: too fast for travis?)
+  var browserid = new BrowserID({
+    insecureSSL: true,
+    httpTimeout: 0.1
+  });
+
+  // A client library instance that over-rides the built in HTTP
+  // implementation
   var overRiddenBrowserid = new BrowserID({
     httpRequest: function(domain, path, cb) {
       cb(null, 200, { 'Content-Type': 'application/json' } , '{ "disabled": true }');
     }
   });
 
-  it('test idp should start up', function(done) {
-    idp.start(done);
+  it('test idps should start up', function(done) {
+    async.parallel([
+      function(cb) {
+        slowidp.start(cb);
+      },
+      function(cb) {
+        disabledidp.start(cb);
+      }
+    ], done);
   });
 
   it('should work with the built-in HTTP implementation', function(done) {
-    browserid.lookup(idp.domain(), function(err, details) {
+    browserid.lookup(disabledidp.domain(), function(err, details) {
       should.not.exist(err);
       details.disabled.should.equal(true);
       details.delegationChain.should.be.instanceof(Array).and.have.lengthOf(1);
-      details.delegationChain[0].should.equal(idp.domain());
-      details.authoritativeDomain.should.equal(idp.domain());
+      details.delegationChain[0].should.equal(disabledidp.domain());
+      details.authoritativeDomain.should.equal(disabledidp.domain());
       done(err);
     });
   });
@@ -49,7 +71,22 @@ describe('.well-known lookup', function() {
     });
   });
 
+  it('should timeout for slow http responses', function(done) {
+    browserid.lookup(slowidp.domain(), function(err) {
+      should.exist(err);
+      err.should.startWith('timeout trying to load well-known for 127.0.0.1:');
+      done(null);
+    });
+  });
+
   it('test idp should shut down', function(done) {
-    idp.stop(done);
+    async.parallel([
+      function(cb) {
+        slowidp.stop(cb);
+      },
+      function(cb) {
+        disabledidp.stop(cb);
+      }
+    ], done);
   });
 });
