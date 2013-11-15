@@ -10,9 +10,13 @@ BrowserID = require('../'),
 IdP = require('./lib/idp.js').IdP;
 
 describe('.well-known lookup', function() {
-  var idp = new IdP();
+  var idp = new IdP({ disabled: true });
 
   var browserid = new BrowserID({
+    insecureSSL: true
+  });
+
+  var overRiddenBrowserid = new BrowserID({
     httpRequest: function(domain, path, cb) {
       cb(null, 200, { 'Content-Type': 'application/json' } , '{ "disabled": true }');
     }
@@ -22,8 +26,20 @@ describe('.well-known lookup', function() {
     idp.start(done);
   });
 
+  it('should work with the built-in HTTP implementation', function(done) {
+    browserid.lookup(idp.domain(), function(err, details) {
+      should.not.exist(err);
+      details.disabled.should.equal(true);
+      details.delegationChain.should.be.instanceof(Array).and.have.lengthOf(1);
+      details.delegationChain[0].should.equal(idp.domain());
+      details.authoritativeDomain.should.equal(idp.domain());
+      done(err);
+    });
+  });
+
+
   it('should work an over-ridden HTTP implementation', function(done) {
-    browserid.lookup('example.com', function(err, details) {
+    overRiddenBrowserid.lookup('example.com', function(err, details) {
       should.not.exist(err);
       details.disabled.should.equal(true);
       details.delegationChain.should.be.instanceof(Array).and.have.lengthOf(1);

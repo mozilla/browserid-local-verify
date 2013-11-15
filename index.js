@@ -12,7 +12,8 @@ function augmentArguments(args) {
 
   var newArgs = {
     'maxDelegations': 5,
-    'httpTimeout': 10.0
+    'httpTimeout': 10.0,
+    'insecureSSL': false
   };
 
   Object.keys(args).forEach(function(k) {

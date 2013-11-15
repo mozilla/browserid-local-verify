@@ -61,8 +61,16 @@ IdP.prototype.start = function(cb) {
         key: fs.readFileSync(path.join(__dirname, '..', 'resources', 'key.pem')),
         cert: fs.readFileSync(path.join(__dirname, '..', 'resources', 'cert.pem'))
       }, function (req, res) {
-        res.writeHead(200, {'Content-Type': 'text/plain'});
-        res.end('Hello World\n');
+        // XXX: we will need a lot of flexibility in sent responses
+        if (req.url.indexOf('/.well-known/browserid') !== 0) {
+          return res.send(404);
+        }
+
+        if (self.args.disabled) {
+          res.writeHead(200, {'Content-Type': 'application/json'});
+          res.end(JSON.stringify({disabled: true}));
+        }
+
       }).listen(0, '127.0.0.1', function() {
         cb(null);
       });
