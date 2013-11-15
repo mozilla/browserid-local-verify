@@ -38,8 +38,13 @@ IdP.prototype.url = function() {
 };
 
 IdP.prototype.publicKey = function() {
-  if (!this._started) throw "IdP isn't started, it has no url";
+  if (!this._started) throw "IdP isn't started, it has no public key";
   return this.details.publicKey;
+};
+
+IdP.prototype.domain = function() {
+  if (!this._started) throw "IdP isn't started, it has no domain";
+  return this.details.domain;
 };
 
 IdP.prototype.start = function(cb) {
@@ -73,8 +78,10 @@ IdP.prototype.start = function(cb) {
     }
   ], function(err) {
     var addy = self._server.address();
+    var domain = addy.address + ":" + addy.port;
     self.details = {
-      url: "https://" + addy.address + ":" + addy.port + "/",
+      url: "https://" + domain + "/",
+      domain: domain,
       publicKey: self._publicKey
     };
     cb(err, self.details);

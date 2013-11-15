@@ -49,3 +49,39 @@ This library is targeted at robust local verification, to subsume all of the fea
     });
 
 XXX: more to come, this is just a strawthing so far.
+
+## configuration
+
+To configure the library you can either pass an object as the first parameter to a supported function:
+
+   browserid.lookup({ httpProxy: 'http://example.com:8080' }, "mozilla.org", function(err, details) {
+     ...
+   });
+
+Or you can allocate a library instance.  This allows you to specify configuration once at instantiation time:
+
+   var BrowserID = require('browserid-local-verify');
+
+   var b = new BrowserID({ httpTimeout: 20.0 });
+   b.lookup("mozilla.org", function(err, details) {
+     // ...
+   });
+
+## knobs and switches:
+
+* **httpTimeout**: How long in seconds we should wait for a response when looking up a well-known document over HTTP. (default: 10)
+* **maxDelegations**: How many times authority may be delegated.
+
+## debug output
+
+The BrowserID class emits events:
+
+   var b = new BrowserID({ httpTimeout: 20.0 });
+
+   b.on('info', function() {
+     console.log('got some 411', arguments);
+   });
+
+   b.lookup("mozilla.org", function(err, details) {
+     // ...
+   });

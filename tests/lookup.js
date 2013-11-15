@@ -6,7 +6,7 @@
 
 const
 should = require('should'),
-Verifier = require('../').Verifier,
+browserid = require('../'),
 IdP = require('./lib/idp.js').IdP;
 
 describe('.well-known lookup', function() {
@@ -18,7 +18,13 @@ describe('.well-known lookup', function() {
   });
 
   // now let's test!
-  // XXX
+  it('should work with the built in HTTP implementation', function(done) {
+    browserid.lookup(idp.domain(), function(err, details) {
+      should.not.exist(err);
+      console.log(details);
+      done(err);
+    });
+  });
 
   it('test idp should shut down', function(done) {
     idp.stop(done);
