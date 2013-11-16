@@ -32,7 +32,7 @@ Verifier.prototype.lookup = function(domain, cb) {
 
 module.exports = Verifier;
 
-exports.lookup = function(args, domain, cb) {
+module.exports.lookup = function(args, domain, cb) {
   // support ommission of args param
   if (arguments.length === 2) {
     cb = domain;

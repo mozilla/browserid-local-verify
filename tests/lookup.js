@@ -10,7 +10,7 @@ BrowserID = require('../'),
 IdP = require('./lib/idp.js').IdP,
 async = require('async');
 
-describe('.well-known lookup', function() {
+describe('.well-known lookup transport tests (HTTP)', function() {
   // a local idp with a 1s delay in serving support documents
   var slowidp = new IdP({
     delay: 1.0

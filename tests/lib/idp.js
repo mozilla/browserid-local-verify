@@ -24,7 +24,16 @@ require("jwcrypto/lib/algs/ds");
 function IdP(args) {
   if (!args) args = {};
   this.args = args;
-  if (!this.args.delay) this.args.delay = 0;
+  // default paramter values
+  this.args.delay = this.args.delay || 0;
+  this.args.algorithm = this.args.algorithm || "rsa";
+  this.args.keysize = this.args.keysize || 128;
+  this.args.delegation = this.args.delegation || null;
+
+  // allow algorithm specification as (i.e.) 'rsa' or 'RS'
+  this.args.algorithm = this.args.algorithm.toUpperCase().substr(0,2);
+
+  if (args.wellKnown) this.wellKnown(args.wellKnown);
 }
 
 function later(cb /* args */) {
@@ -49,6 +58,25 @@ IdP.prototype.domain = function() {
   return this.details.domain;
 };
 
+// the domain to whom this domain should delegate
+IdP.prototype.delegation = function(domain) {
+  if (domain === null) this.args.delegation = null;
+  return (this.args.delegation = domain || this.args.delegation);
+};
+
+// the domain to whom this domain should delegate
+IdP.prototype.delay = function(delay) {
+  if (typeof delay === 'number') this.args.delay = delay;
+  return this.args.delay;
+};
+
+// the domain to whom this domain should delegate
+IdP.prototype.wellKnown = function(str) {
+  if (str !== null && typeof str === 'object') str = JSON.stringify(str);
+  return (this.args.wellKnown = str);
+};
+
+
 IdP.prototype.start = function(cb) {
   if (this._started) return later(cb, null, this.details);
   this._started = true;
@@ -60,13 +88,21 @@ IdP.prototype.start = function(cb) {
       return res.send(404);
     }
 
+    // XXX: these config values should all be mutually exclusive.  There's this odd
+    // precedence going on that will confuse some poor test writer.
     if (self.args.http_redirect) {
       var location = 'https://' + self.args.http_redirect + '/.well-known/browserid';
       res.writeHead(301, {'Location': location});
       res.end();
+    } else if (self.args.wellKnown) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(self.args.wellKnown);
     } else if (self.args.disabled) {
       res.writeHead(200, {'Content-Type': 'application/json'});
       res.end(JSON.stringify({disabled: true}));
+    } else if (self.args.delegation) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
+      res.end(JSON.stringify({authority: self.args.delegation}));
     } else {
       res.writeHead(200, {'Content-Type': 'application/json'});
       res.end(JSON.stringify({
@@ -94,7 +130,10 @@ IdP.prototype.start = function(cb) {
     },
     function(cb) {
       // generate an RSA keypair for the idp
-      jwcrypto.generateKeypair({ algorithm: 'RS', keysize: '128' }, function(err, kp) {
+      jwcrypto.generateKeypair({
+        algorithm: self.args.algorithm,
+        keysize: self.args.keysize
+      }, function(err, kp) {
         if (err) return cb(err);
         self._publicKey = kp.publicKey;
         self._secretKey = kp.secretKey;
