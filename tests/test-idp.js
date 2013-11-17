@@ -6,7 +6,8 @@
 
 const
 should = require('should'),
-IdP = require('./lib/idp.js').IdP;
+IdP = require('./lib/idp.js').IdP,
+browserid = require('..');
 
 describe('test idp implementation', function() {
   // and a new test IdP
@@ -21,6 +22,15 @@ describe('test idp implementation', function() {
       details.publicKey.should.be.type('object');
       details.url.should.equal(idp.url());
       (details.publicKey.serialize()).should.equal(idp.publicKey().serialize());
+      done();
+    });
+  });
+
+  it('should handle custom support documents', function(done) {
+    idp.wellKnown({ custom: true});
+
+    browserid.lookup({ insecureSSL: true }, idp.domain(), function(err) {
+      (err).should.contain('support document missing');
       done();
     });
   });

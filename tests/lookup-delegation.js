@@ -81,12 +81,12 @@ describe('.well-known lookup, delegation', function() {
 
   it('should handle broken chains elegantly (malformed .well-known)', function(done) {
     // now let's park a bogus well-known document
+    chain[7].delegation(null);
     chain[7].wellKnown({ bogus: true });
 
     browserid.lookup({
       insecureSSL: true,
-      maxDelegations: 10,
-      httpTimeout: 0.3 // only tolerate a 300ms delay
+      maxDelegations: 10
     }, chain[0].domain(), function(err) {
       should.exist(err);
       err.should.startWith('bad support document');
@@ -94,6 +94,7 @@ describe('.well-known lookup, delegation', function() {
 
       // fix the document
       chain[7].wellKnown(null);
+      chain[7].delegation(chain[8].domain());
     });
   });
 

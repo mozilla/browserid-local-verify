@@ -71,9 +71,13 @@ IdP.prototype.delay = function(delay) {
 };
 
 // the domain to whom this domain should delegate
-IdP.prototype.wellKnown = function(str) {
-  if (str !== null && typeof str === 'object') str = JSON.stringify(str);
-  return (this.args.wellKnown = str);
+IdP.prototype.wellKnown = function(obj) {
+  if (obj !== undefined) this.args.wellKnown = obj;
+  return this.args.wellKnown || {
+    authentication: '/auth.html',
+    provisioning: '/prov.html',
+    "public-key": this.publicKey().toSimpleObject()
+  };
 };
 
 
@@ -94,9 +98,6 @@ IdP.prototype.start = function(cb) {
       var location = 'https://' + self.args.http_redirect + '/.well-known/browserid';
       res.writeHead(301, {'Location': location});
       res.end();
-    } else if (self.args.wellKnown) {
-      res.writeHead(200, {'Content-Type': 'application/json'});
-      res.end(self.args.wellKnown);
     } else if (self.args.disabled) {
       res.writeHead(200, {'Content-Type': 'application/json'});
       res.end(JSON.stringify({disabled: true}));
@@ -105,11 +106,7 @@ IdP.prototype.start = function(cb) {
       res.end(JSON.stringify({authority: self.args.delegation}));
     } else {
       res.writeHead(200, {'Content-Type': 'application/json'});
-      res.end(JSON.stringify({
-        authentication: '/auth.html',
-        provisioning: '/prov.html',
-        "public-key": self.publicKey().toSimpleObject()
-      }));
+      res.end(JSON.stringify(self.wellKnown()));
     }
   }
 
