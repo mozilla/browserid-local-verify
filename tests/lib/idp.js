@@ -53,6 +53,11 @@ IdP.prototype.publicKey = function() {
   return this.details.publicKey;
 };
 
+IdP.prototype.privateKey = function() {
+  if (!this._started) throw "IdP isn't started, it has no public key";
+  return this._secretKey;
+};
+
 IdP.prototype.domain = function() {
   if (!this._started) throw "IdP isn't started, it has no domain";
   return this.details.domain;
