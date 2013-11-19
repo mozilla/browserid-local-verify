@@ -49,7 +49,9 @@ Client.prototype.certificate = function(cb) {
     }, {
       issuer: self.args.idp.domain(),
       issuedAt: new Date(),
-      expiresAt: (new Date() + (60 * 60)) // cert valid for 60 minutes
+      // XXX: allow the client to control certificate duration, and make the default
+      // a constant.
+      expiresAt: (new Date() + (60 * 60 * 1000)) // cert valid for 60 minutes
     }, null, self.args.idp.privateKey(), function(err, cert) {
       self._certificate = cert;
       cb(err, cert);
@@ -63,7 +65,9 @@ Client.prototype.assertion = function(args, cb) {
   self.certificate(function(err) {
     if (err) return cb(err);
     jwcrypto.assertion.sign(
-      {}, { audience: args.audience, expiresAt: (new Date() + 120) },
+      // XXX: allow the client to control assertion duration, and make the default
+      // a constant.
+      {}, { audience: args.audience, expiresAt: (new Date().getTime() + 2 * 60 * 1000) },
       self._secretKey,
       function(err, signedContents) {
         if (err) return cb(err);
