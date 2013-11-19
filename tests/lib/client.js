@@ -31,6 +31,10 @@ function later(cb /* args */) {
   });
 }
 
+Client.prototype.email = function() {
+  return this.args.email || null;
+};
+
 // generate or return a signed certificate for this client
 Client.prototype.certificate = function(cb) {
   if (this._certificate) return later(null, this._certificate);

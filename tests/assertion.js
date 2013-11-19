@@ -34,8 +34,14 @@ describe('assertion verification, basic', function() {
       browserid.verify(
         assertion, 'http://example.com',
         function(err, details) {
-          // XXX: check details for pertinent values
-          console.log(details);
+          should.not.exist(err);
+          (details).should.be.type('object');
+          (details.audience).should.equal('http://example.com');
+          // a basic sanity on expiration date
+          var now = new Date();
+          (details.expires).should.be.above(now - 60).and.should.be.above(now + 120);
+          (details.issuer).should.equal(idp.domain());
+          (details.email).should.equal(client.email());
           done(err);
         });
     });
@@ -50,12 +56,18 @@ describe('assertion verification, basic', function() {
     // allocate a new "client".  She has an email and idp as specified below
     // generate an assertion (and all pre-requisites)
     client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
-      // XXX: now we must specify a fallback
       BrowserID.verify({
         insecureSSL: true,
         fallback: idp.domain()
-      }, assertion, 'http://example.com', function(err) {
-        // XXX: check details for pertinent values
+      }, assertion, 'http://example.com', function(err, details) {
+        should.not.exist(err);
+        (details).should.be.type('object');
+        (details.audience).should.equal('http://example.com');
+        // a basic sanity on expiration date
+        var now = new Date();
+        (details.expires).should.be.above(now - 60).and.should.be.above(now + 120);
+        (details.issuer).should.equal(idp.domain());
+        (details.email).should.equal(client.email());
         done(err);
       });
     });
