@@ -14,7 +14,7 @@ jwcrypto = require('jwcrypto');
 require("jwcrypto/lib/algs/rs");
 require("jwcrypto/lib/algs/ds");
 
-describe('.well-known lookup transport tests (HTTP)', function() {
+describe('assertion verification, basic', function() {
   // a local idp with a 1s delay in serving support documents
   var idp = new IdP();
 
@@ -37,7 +37,7 @@ describe('.well-known lookup transport tests (HTTP)', function() {
       // a 'cert'.
       jwcrypto.cert.sign({
         publicKey: kp.publicKey,
-        principal: 'test@' + idp.domain()
+        principal: { email: 'test@' + idp.domain() }
       }, {
         issuer: idp.domain(),
         issuedAt: new Date(),
@@ -47,7 +47,7 @@ describe('.well-known lookup transport tests (HTTP)', function() {
 
         // now that we have a signed cert, let's generate an assertion
         jwcrypto.assertion.sign(
-          {}, {audience: 'http://example.com', expiresAt: (new Date() + 120) },
+          {}, { audience: 'http://example.com', expiresAt: (new Date() + 120) },
           kp.secretKey,
           function(err, signedContents) {
             should.not.exist(err);
@@ -57,7 +57,8 @@ describe('.well-known lookup transport tests (HTTP)', function() {
             browserid.verify(
               { insecureSSL: true },
               assertion, 'http://example.com',
-              function(err) {
+              function(err, details) {
+                console.log(details);
                 done(err);
               });
           });
