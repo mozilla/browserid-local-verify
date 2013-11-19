@@ -8,6 +8,7 @@ const
 should = require('should'),
 browserid = require('../'),
 IdP = require('./lib/idp.js').IdP,
+Client = require('./lib/client.js'),
 jwcrypto = require('jwcrypto');
 
 // I hate this.
@@ -23,46 +24,21 @@ describe('assertion verification, basic', function() {
   });
 
   it('validation of basic assertion should succeed', function(done) {
-    // XXX: let's make a library for this (under test/lib) so we can test the shit out of
-    // assertion verification with terse and readable tests.
+    // allocate a new "client".  She has an email and idp as specified below
+    var client = new Client({
+      email: 'test@' + idp.domain(),
+      idp: idp
+    });
 
-    // generate a keypair
-    jwcrypto.generateKeypair({
-      algorithm: 'DS',
-      keysize: 128
-    }, function(err, kp) {
-      should.not.exist(err);
-
-      // sign the public key with the idp's private, creating what we call around here
-      // a 'cert'.
-      jwcrypto.cert.sign({
-        publicKey: kp.publicKey,
-        principal: { email: 'test@' + idp.domain() }
-      }, {
-        issuer: idp.domain(),
-        issuedAt: new Date(),
-        expiresAt: (new Date() + (60 * 60)) // cert valid for 60 minutes
-      }, null, idp.privateKey(), function(err, cert) {
-        should.not.exist(err);
-
-        // now that we have a signed cert, let's generate an assertion
-        jwcrypto.assertion.sign(
-          {}, { audience: 'http://example.com', expiresAt: (new Date() + 120) },
-          kp.secretKey,
-          function(err, signedContents) {
-            should.not.exist(err);
-            var assertion = jwcrypto.cert.bundle([cert], signedContents);
-
-            // and finally, this assertion should verify
-            browserid.verify(
-              { insecureSSL: true },
-              assertion, 'http://example.com',
-              function(err, details) {
-                console.log(details);
-                done(err);
-              });
-          });
-      });
+    // generate an assertion (and all pre-requisites)
+    client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
+      browserid.verify(
+        { insecureSSL: true },
+        assertion, 'http://example.com',
+        function(err, details) {
+          console.log(details);
+          done(err);
+        });
     });
   });
 
