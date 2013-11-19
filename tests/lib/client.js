@@ -47,15 +47,19 @@ Client.prototype.certificate = function(cb) {
     if (err) return cb(err);
     self._publicKey = kp.publicKey;
     self._secretKey = kp.secretKey;
+
+    // allow the client to control issue time
+    var issuedAt = self.args.certificateIssueTime || new Date();
+    // cert valid for client specified duration or 60 minutes by default
+    var expiresAt = (issuedAt + (self.args.certificateDuration || 60 * 60));
+
     jwcrypto.cert.sign({
       publicKey: self._publicKey,
       principal: { email: self.args.email }
     }, {
       issuer: self.args.idp.domain(),
-      issuedAt: new Date(),
-      // XXX: allow the client to control certificate duration, and make the default
-      // a constant.
-      expiresAt: (new Date() + (60 * 60 * 1000)) // cert valid for 60 minutes
+      issuedAt: issuedAt,
+      expiresAt:  expiresAt
     }, null, self.args.idp.privateKey(), function(err, cert) {
       self._certificate = cert;
       cb(err, cert);
@@ -68,10 +72,12 @@ Client.prototype.assertion = function(args, cb) {
   var self = this;
   self.certificate(function(err) {
     if (err) return cb(err);
+    var expiresAt = ((args.issueTime || (new Date().getTime())) + (2 * 60 * 1000));
     jwcrypto.assertion.sign(
-      // XXX: allow the client to control assertion duration, and make the default
-      // a constant.
-      {}, { audience: args.audience, expiresAt: (new Date().getTime() + 2 * 60 * 1000) },
+      // XXX: NOTE - assertion's are assumed to be valid for 2 minutes, there's
+      // seemingly no way to embed issue time into assertion.  We may want to extend
+      // the spec.
+      {}, { audience: args.audience, expiresAt: expiresAt },
       self._secretKey,
       function(err, signedContents) {
         if (err) return cb(err);
