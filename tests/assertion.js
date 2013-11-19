@@ -11,7 +11,8 @@ IdP = require('./lib/idp.js').IdP,
 Client = require('./lib/client.js'),
 jwcrypto = require('jwcrypto');
 
-// I hate this.
+// I hate this!  Algorithms should be loaded on demand without explicit
+// wonky requires by the client.
 require("jwcrypto/lib/algs/rs");
 require("jwcrypto/lib/algs/ds");
 
