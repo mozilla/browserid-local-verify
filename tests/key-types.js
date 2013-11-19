@@ -33,18 +33,24 @@ describe('key size and type', function() {
   var browserid = new BrowserID({ insecureSSL: true});
 
   it('all permutations (user / IdP) should pass basic assertion verification', function(done) {
+    // for each key size and type...
     async.each(keyTypes, function(idpkt, done) {
+      // we'll allocate an IdP with a domain key of that size/type...
       var idp = new IdP(idpkt);
       idp.start(function(err) {
         should.not.exist(err);
+        // and for each key size and type...
         async.each(keyTypes, function(clientkt, done) {
+          // we'll generate a user key...
           var client = new Client({
             idp: idp,
             keysize: clientkt.keysize,
             algorithm: clientkt.algorithm
           });
+          // and using that user key we'll generate and assertion...
           client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
             should.not.exist(err);
+            // and that assertion should verify properly...
             browserid.verify(
               assertion, 'http://example.com',
               function(err, details) {
