@@ -14,6 +14,11 @@ BrowserID = require('../'),
 IdP = require('./lib/idp.js').IdP,
 Client = require('./lib/client.js');
 
+function secsFromNow(adj) {
+  var ms = new Date().valueOf();
+  return (Math.floor(ms / 1000) + adj);
+}
+
 describe('assertion time verification', function() {
   var idp = new IdP();
   var browserid;
@@ -33,7 +38,7 @@ describe('assertion time verification', function() {
     var client = new Client({
       idp: idp,
       email: 'test@example,com',
-      certificateIssueTime: new Date() - (24 * 60 * 60)
+      certificateIssueTime: secsFromNow(-(24*60*60)) // one day ago
     });
 
     // allocate a new "client".  She has an email and idp as specified below
@@ -42,8 +47,7 @@ describe('assertion time verification', function() {
       should.not.exist(err);
       browserid.verify(assertion, 'http://example.com', function(err) {
         should.exist(err);
-        // XXX: this fails because jwcrypto is emitting bogus error messages
-        (err).should.contain("certificate has expired");
+        (err).should.contain("certificate expired");
         done(null);
       });
     });
@@ -53,7 +57,7 @@ describe('assertion time verification', function() {
     var client = new Client({
       idp: idp,
       email: 'test@example,com',
-      certificateIssueTime: new Date() + (24 * 60 * 60)
+      certificateIssueTime: secsFromNow((24*60*60)) // a day from now
     });
 
     // allocate a new "client".  She has an email and idp as specified below
@@ -62,9 +66,7 @@ describe('assertion time verification', function() {
       should.not.exist(err);
       browserid.verify(assertion, 'http://example.com', function(err) {
         should.exist(err);
-        // XXX: this fails because jwcrypto is not performing sufficient checks on
-        // certificate issue time
-        (err).should.contain("certificate has future issue time");
+        (err).should.contain("certificate issued later");
         done(null);
       });
     });
@@ -85,12 +87,12 @@ describe('assertion time verification', function() {
     // generate an assertion (and all pre-requisites)
     client.assertion({
       audience: 'http://example.com',
-      issueTime: new Date() - (3 * 60)
+      issueTime: secsFromNow(-(3*60)) // 3 minutes ago
     }, function(err, assertion) {
       should.not.exist(err);
       browserid.verify(assertion, 'http://example.com', function(err) {
         should.exist(err);
-        (err).should.contain("assertion has expired");
+        (err).should.contain("assertion expired");
         done(null);
       });
     });
@@ -106,12 +108,12 @@ describe('assertion time verification', function() {
     // generate an assertion (and all pre-requisites)
     client.assertion({
       audience: 'http://example.com',
-      issueTime: (new Date().getTime() + (3 * 60 * 1000))
+      issueTime: secsFromNow(3*60) // three minutes from now
     }, function(err, assertion) {
       should.not.exist(err);
       browserid.verify(assertion, 'http://example.com', function(err) {
         should.exist(err);
-        (err).should.contain("assertion has future issue time");
+        (err).should.contain("assertion issued later than verification date");
         done(null);
       });
     });

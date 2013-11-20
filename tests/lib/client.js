@@ -49,7 +49,7 @@ Client.prototype.certificate = function(cb) {
     self._secretKey = kp.secretKey;
 
     // allow the client to control issue time
-    var issuedAt = self.args.certificateIssueTime || new Date();
+    var issuedAt = (self.args.certificateIssueTime * 1000) || new Date().getTime();
     // cert valid for client specified duration or 60 minutes by default
     var expiresAt = (issuedAt + (self.args.certificateDuration || 60 * 60));
 
@@ -72,12 +72,14 @@ Client.prototype.assertion = function(args, cb) {
   var self = this;
   self.certificate(function(err) {
     if (err) return cb(err);
-    var expiresAt = ((args.issueTime || (new Date().getTime())) + (2 * 60 * 1000));
+
+    // NOTE: historically assertions have not contained issuedAt, but jwcrtpto
+    // will check it if provided.  we hope it becomes part of the spec and test
+    // here.
+    var issuedAt = (args.issueTime * 1000) || new Date().getTime();
+    var expiresAt = (issuedAt + (2 * 60 * 1000));
     jwcrypto.assertion.sign(
-      // XXX: NOTE - assertion's are assumed to be valid for 2 minutes, there's
-      // seemingly no way to embed issue time into assertion.  We may want to extend
-      // the spec.
-      {}, { audience: args.audience, expiresAt: expiresAt },
+      {}, { audience: args.audience, expiresAt: expiresAt, issuedAt: issuedAt },
       self._secretKey,
       function(err, signedContents) {
         if (err) return cb(err);
