@@ -29,7 +29,6 @@ describe('.well-known lookup transport tests (HTTP)', function() {
 
   // a client library instance which ignores invalid SSL certs, and
   // only tolerates a 100ms delay in HTTP requests
-  // (XXX: too fast for travis?)
   var browserid = new BrowserID({
     insecureSSL: true,
     httpTimeout: 0.1
