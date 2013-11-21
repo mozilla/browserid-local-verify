@@ -72,11 +72,6 @@ describe('assertion time verification', function() {
     });
   });
 
-  it('assertions backed by certificates with minor clock drift should verify', function(done) {
-    // XXX: write me
-    done();
-  });
-
   it('expired assertions should fail to verify', function(done) {
     var client = new Client({
       idp: idp,
@@ -117,11 +112,6 @@ describe('assertion time verification', function() {
         done(null);
       });
     });
-  });
-
-  it('assertions with minor clock drift should verify', function(done) {
-    // XXX: write me
-    done();
   });
 
   it('test idp should shut down', function(done) {
