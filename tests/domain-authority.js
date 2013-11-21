@@ -38,8 +38,7 @@ describe('domain authority', function() {
       BrowserID.verify({
         insecureSSL: true,
         fallback: fallback.domain()
-      }, assertion, 'http://example.com',
-        function(err) {
+      }, assertion, 'http://example.com', function(err) {
           should.exist(err);
           (err).should.startWith("untrusted issuer");
           done(null);
