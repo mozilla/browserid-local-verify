@@ -92,7 +92,7 @@ IdP.prototype.start = function(cb) {
 
   var self = this;
 
-  function handleRequest(req,res) {
+  function handleRequest(req, res) {
     if (req.url.indexOf('/.well-known/browserid') !== 0) {
       return res.send(404);
     }
@@ -109,6 +109,19 @@ IdP.prototype.start = function(cb) {
     } else if (self.args.delegation) {
       res.writeHead(200, {'Content-Type': 'application/json'});
       res.end(JSON.stringify({authority: self.args.delegation}));
+    }
+    // if the caller supplied a 'dynamicWellKnown' function, allow them to
+    // craft a support document after considering the URL with which it was
+    // fetched
+    else if (self.args.dynamicWellKnown) {
+      self.args.dynamicWellKnown(req.url, function(err, doc) {
+        if (err) {
+          res.writeHead(500, {'Error': err});
+        } else {
+          res.writeHead(200, {'Content-Type': 'application/json'});
+          res.end(JSON.stringify(doc || self.wellKnown()));
+        }
+      });
     } else {
       res.writeHead(200, {'Content-Type': 'application/json'});
       res.end(JSON.stringify(self.wellKnown()));

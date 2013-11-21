@@ -23,7 +23,7 @@ describe('.well-known lookup, delegation', function() {
     browserid.lookup({
       insecureSSL: true,
       maxDelegations: 9
-    }, chain[0].domain(), function(err, details) {
+    }, chain[0].domain(), null, function(err, details) {
       should.not.exist(err);
       details.delegationChain.should.be.instanceof(Array).and.have.lengthOf(10);
       details.authoritativeDomain.should.equal(chain[9].domain());
@@ -35,7 +35,7 @@ describe('.well-known lookup, delegation', function() {
     browserid.lookup({
       insecureSSL: true,
       maxDelegations: 8
-    }, chain[0].domain(), function(err) {
+    }, null, chain[0].domain(), function(err) {
       should.exist(err);
       err.should.startWith('Too many hops while delegating authority');
       done(null);
@@ -49,7 +49,7 @@ describe('.well-known lookup, delegation', function() {
     browserid.lookup({
       insecureSSL: true,
       maxDelegations: 100
-    }, chain[0].domain(), function(err) {
+    }, chain[0].domain(), null, function(err) {
       should.exist(err);
       err.should.startWith('Circular reference in delegating authority');
 
@@ -68,7 +68,7 @@ describe('.well-known lookup, delegation', function() {
       insecureSSL: true,
       maxDelegations: 10,
       httpTimeout: 0.3 // only tolerate a 300ms delay
-    }, chain[0].domain(), function(err) {
+    }, chain[0].domain(), null, function(err) {
       should.exist(err);
       err.should.startWith('timeout trying to load');
 
@@ -87,7 +87,7 @@ describe('.well-known lookup, delegation', function() {
     browserid.lookup({
       insecureSSL: true,
       maxDelegations: 10
-    }, chain[0].domain(), function(err) {
+    }, chain[0].domain(), null, function(err) {
       should.exist(err);
       err.should.startWith('bad support document');
       done(null);

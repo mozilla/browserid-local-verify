@@ -30,8 +30,8 @@ function augmentArguments(args) {
 util.inherits(Verifier, events.EventEmitter);
 
 var lookup = require('./lib/lookup.js');
-Verifier.prototype.lookup = function(domain, cb) {
-  lookup(this.args, this, domain, cb);
+Verifier.prototype.lookup = function(domain, principalDomain, cb) {
+  lookup(this.args, this, domain, principalDomain, cb);
 };
 
 var verify = require('./lib/verify.js');
@@ -41,15 +41,16 @@ Verifier.prototype.verify = function(assertion, audience, cb) {
 
 module.exports = Verifier;
 
-module.exports.lookup = function(args, domain, cb) {
+module.exports.lookup = function(args, domain, principalDomain, cb) {
   // support ommission of args param
   if (arguments.length === 2) {
-    cb = domain;
+    cb = principalDomain;
+    principalDomain = domain;
     domain = args;
     args = null;
   }
   var v = new Verifier(args);
-  v.lookup(domain, cb);
+  v.lookup(domain, principalDomain, cb);
 };
 
 module.exports.verify = function(args, assertion, audience, cb) {
