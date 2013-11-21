@@ -17,7 +17,6 @@ require("jwcrypto/lib/algs/ds");
 describe('domain authority', function() {
   var idp = new IdP();
   var fallback = new IdP();
-  var browserid = new BrowserID();
   var client;
 
   it('test idps should start up', function(done) {
@@ -40,7 +39,7 @@ describe('domain authority', function() {
         insecureSSL: true,
         fallback: fallback.domain()
       }, assertion, 'http://example.com',
-        function(err, details) {
+        function(err) {
           should.exist(err);
           (err).should.startWith("untrusted issuer");
           done(null);

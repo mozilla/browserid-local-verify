@@ -11,7 +11,7 @@
     "node": ">=0.8.0"
   },
   "dependencies": {
-    "jwcrypto": "0.4.4",
+    "jwcrypto": "git://github.com/mozila/jwcrypto#8e3037a",
     "async": "0.2.9",
     "urlparse": "0.0.1"
   },
