@@ -36,15 +36,16 @@ describe('idp extra claims', function() {
     }, function(err) {
       should.not.exist(err);
       client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
-        browserid.verify(
-          assertion, 'http://example.com',
-          function(err, details) {
-            should.not.exist(err);
-            details.idpClaims.should.be.type('object');
-            details.idpClaims.email.should.equal('bob@example.com');
-            details.idpClaims.uuid.should.equal('0ee70eb8-9b5b-49d7-8973-d587ed06b933');
-            done(err);
-          });
+        browserid.verify({
+          assertion: assertion,
+          audience: 'http://example.com'
+        }, function(err, details) {
+          should.not.exist(err);
+          details.idpClaims.should.be.type('object');
+          details.idpClaims.email.should.equal('bob@example.com');
+          details.idpClaims.uuid.should.equal('0ee70eb8-9b5b-49d7-8973-d587ed06b933');
+          done(err);
+        });
       });
     });
   });

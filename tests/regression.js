@@ -70,24 +70,25 @@ describe('assertion regression tests', function() {
   cases.forEach(function(c) {
     it(c.name, function(done) {
       var browserid = mockedVerificationClient(c.pubKey, validDate(c.assertion), c.issuer, c.trustedIssuers);
-      browserid.verify(
-        c.assertion, c.audience,
-        function(err, details) {
-          should.not.exist(err);
-          (details.audience).should.equal(c.audience);
-          if (c.email) (details.email).should.equal(c.email);
-          (details.issuer).should.equal(c.issuer);
-          // if additional idpClaims exist, test them here.
-          if (c.idpClaims) {
-            (details.idpClaims).should.exist;
-            (details.idpClaims).should.be.type('object');
-            Object.keys(c.idpClaims).forEach(function(claim) {
-              details.idpClaims.should.have.property(claim);
-              details.idpClaims[claim].should.equal(c.idpClaims[claim]);
-            });
-          }
-          done(err);
-        });
+      browserid.verify({
+        assertion: c.assertion,
+        audience: c.audience
+      }, function(err, details) {
+        should.not.exist(err);
+        (details.audience).should.equal(c.audience);
+        if (c.email) (details.email).should.equal(c.email);
+        (details.issuer).should.equal(c.issuer);
+        // if additional idpClaims exist, test them here.
+        if (c.idpClaims) {
+          (details.idpClaims).should.exist;
+          (details.idpClaims).should.be.type('object');
+          Object.keys(c.idpClaims).forEach(function(claim) {
+            details.idpClaims.should.have.property(claim);
+            details.idpClaims[claim].should.equal(c.idpClaims[claim]);
+          });
+        }
+        done(err);
+      });
     });
   });
 });

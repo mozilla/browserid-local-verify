@@ -51,19 +51,20 @@ describe('key size and type', function() {
           client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
             should.not.exist(err);
             // and that assertion should verify properly...
-            browserid.verify(
-              assertion, 'http://example.com',
-              function(err, details) {
-                should.not.exist(err);
-                (details).should.be.type('object');
-                (details.audience).should.equal('http://example.com');
-                // a basic sanity on expiration date
-                var now = new Date();
-                (details.expires).should.be.above(now - 60).and.should.be.above(now + 120);
-                (details.issuer).should.equal(idp.domain());
-                (details.email).should.equal(client.email());
-                done(null);
-              });
+            browserid.verify({
+              assertion: assertion,
+              audience: 'http://example.com'
+            }, function(err, details) {
+              should.not.exist(err);
+              (details).should.be.type('object');
+              (details.audience).should.equal('http://example.com');
+              // a basic sanity on expiration date
+              var now = new Date();
+              (details.expires).should.be.above(now - 60).and.should.be.above(now + 120);
+              (details.issuer).should.equal(idp.domain());
+              (details.email).should.equal(client.email());
+              done(null);
+            });
           });
         }, function(err) {
           should.not.exist(err);

@@ -45,7 +45,10 @@ describe('assertion time verification', function() {
     // generate an assertion (and all pre-requisites)
     client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
       should.not.exist(err);
-      browserid.verify(assertion, 'http://example.com', function(err) {
+      browserid.verify({
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err) {
         should.exist(err);
         (err).should.contain("certificate expired");
         done(null);
@@ -64,7 +67,10 @@ describe('assertion time verification', function() {
     // generate an assertion (and all pre-requisites)
     client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
       should.not.exist(err);
-      browserid.verify(assertion, 'http://example.com', function(err) {
+      browserid.verify({
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err) {
         should.exist(err);
         (err).should.contain("certificate issued later");
         done(null);
@@ -85,7 +91,10 @@ describe('assertion time verification', function() {
       issueTime: secsFromNow(-(3*60)) // 3 minutes ago
     }, function(err, assertion) {
       should.not.exist(err);
-      browserid.verify(assertion, 'http://example.com', function(err) {
+      browserid.verify({
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err) {
         should.exist(err);
         (err).should.contain("assertion expired");
         done(null);
@@ -106,7 +115,10 @@ describe('assertion time verification', function() {
       issueTime: secsFromNow(3*60) // three minutes from now
     }, function(err, assertion) {
       should.not.exist(err);
-      browserid.verify(assertion, 'http://example.com', function(err) {
+      browserid.verify({
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err) {
         should.exist(err);
         (err).should.contain("assertion issued later than verification date");
         done(null);

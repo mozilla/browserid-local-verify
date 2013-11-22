@@ -37,12 +37,14 @@ describe('domain authority', function() {
     client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
       BrowserID.verify({
         insecureSSL: true,
-        fallback: fallback.domain()
-      }, assertion, 'http://example.com', function(err) {
-          should.exist(err);
-          (err).should.startWith("untrusted issuer");
-          done(null);
-        });
+        fallback: fallback.domain(),
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err) {
+        should.exist(err);
+        (err).should.startWith("untrusted issuer");
+        done(null);
+      });
     });
   });
 

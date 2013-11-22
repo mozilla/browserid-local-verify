@@ -32,19 +32,20 @@ describe('assertion verification, basic', function() {
     // allocate a new "client".  She has an email and idp as specified below
     // generate an assertion (and all pre-requisites)
     client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
-      browserid.verify(
-        assertion, 'http://example.com',
-        function(err, details) {
-          should.not.exist(err);
-          (details).should.be.type('object');
-          (details.audience).should.equal('http://example.com');
-          // a basic sanity on expiration date
-          var now = new Date();
-          (details.expires).should.be.above(now - 60).and.should.be.above(now + 120);
-          (details.issuer).should.equal(idp.domain());
-          (details.email).should.equal(client.email());
-          done(err);
-        });
+      browserid.verify({
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err, details) {
+        should.not.exist(err);
+        (details).should.be.type('object');
+        (details.audience).should.equal('http://example.com');
+        // a basic sanity on expiration date
+        var now = new Date();
+        (details.expires).should.be.above(now - 60).and.should.be.above(now + 120);
+        (details.issuer).should.equal(idp.domain());
+        (details.email).should.equal(client.email());
+        done(err);
+      });
     });
   });
 
@@ -57,11 +58,12 @@ describe('assertion verification, basic', function() {
     // allocate a new "client".  She has an email and idp as specified below
     // generate an assertion (and all pre-requisites)
     client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
-      BrowserID.verify({
-        insecureSSL: true,
+      browserid.verify({
         fallback: idp.domain(),
-        httpTimeout: 0.1
-      }, assertion, 'http://example.com', function(err, details) {
+        httpTimeout: 0.1,
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err, details) {
         should.not.exist(err);
         (details).should.be.type('object');
         (details.audience).should.equal('http://example.com');

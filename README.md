@@ -74,6 +74,8 @@ Or you can allocate a library instance.  This allows you to specify configuratio
 
 ## Configuration and Arguments
 
+### Common Arguments
+
 * **httpRequest**: A function that allows the client to control how http requests are performed.
   * input arguments: (domain, path, callback)
   * callback argbuments: (err, statusCode, headers, body)
@@ -81,8 +83,6 @@ Or you can allocate a library instance.  This allows you to specify configuratio
 * **maxDelegations**: How many times authority may be delegated.
 * **insecureSSL**: When true, invalid SSL certificates are ignored (NEVER use this in production).
 * **fallback**: A domain that is authoritative when support document lookup fails for the prinicpal email address's domain.
-* **trustedIssuers**: An array of domains that will be trusted to vouch for any identity, irregardless of the authority as determined from the email addresses domain.
-* **now**: over-ride the current time for purposes of assertion verification. (useful for testing)
 
 ### lookup specific
 
@@ -91,7 +91,10 @@ Or you can allocate a library instance.  This allows you to specify configuratio
 
 ### verification specific
 
-XXX
+* **now**: override the current time for purposes of assertion verification. (useful for testing)
+* **assertion**: the assertion to verify
+* **audience**: the expected assertion audience
+* **trustedIssuers**: An array of domains that will be trusted to vouch for any identity, regardless of the authority as determined from the email addresses domain.
 
 ## debug output and metrics
 

@@ -53,8 +53,10 @@ describe('domain GET param when fetching well-known', function() {
       BrowserID.verify({
         insecureSSL: true,
         fallback: fallback.domain(),
-        httpTimeout: 0.1 // fail faster for prompt tests
-      }, assertion, 'http://example.com', done);
+        httpTimeout: 0.1, // fail faster for prompt tests
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, done);
     });
   });
 
@@ -69,8 +71,10 @@ describe('domain GET param when fetching well-known', function() {
       BrowserID.verify({
         insecureSSL: true,
         fallback: fallback.domain(),
-        httpTimeout: 0.1 // fail faster for prompt tests
-      }, assertion, 'http://example.com', done);
+        httpTimeout: 0.1, // fail faster for prompt tests
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, done);
     });
   });
 
