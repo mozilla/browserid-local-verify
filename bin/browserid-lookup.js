@@ -24,6 +24,9 @@ var args = require('optimist')
 .describe('f', 'domain of fallback IdP (often - login.persona.org)')
 .alias('p', 'principalDomain')
 .describe('p', 'specify the prinicpal email domain')
+.alias('t', 'timeout')
+.describe('t', 'HTTP timeout when fetching support documents')
+.default('t', 8)
 .alias('v', 'verbose')
 .boolean('v')
 .describe('v', 'print annoyinglymuch info about the discovery process')
@@ -40,7 +43,8 @@ var principalDomain = argv.p || domain;
 var browserid = new BrowserID({
   fallback: argv.fallback,
   domain: domain,
-  principalDomain: principalDomain
+  principalDomain: principalDomain,
+  httpTimeout: argv.timeout
 });
 
 if (argv.v) {
