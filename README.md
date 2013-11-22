@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/lloyd/browserid-local-verify.png?branch=master)](https://travis-ci.org/lloyd/browserid-local-verify)
 
-(status:  **experimental**, **incomplete**)
+(status:  **experimental**)
 
 # A node.js BrowserID verification library
 
@@ -49,8 +49,6 @@ This library is targeted at robust local verification, to subsume all of the fea
       console.log(details.pubKey);
       console.log(details.delegationChain);
     });
-
-XXX: more to come, this is just a strawthing so far.
 
 ## configuration
 
