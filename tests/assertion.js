@@ -59,7 +59,8 @@ describe('assertion verification, basic', function() {
     client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
       BrowserID.verify({
         insecureSSL: true,
-        fallback: idp.domain()
+        fallback: idp.domain(),
+        httpTimeout: 0.1
       }, assertion, 'http://example.com', function(err, details) {
         should.not.exist(err);
         (details).should.be.type('object');
