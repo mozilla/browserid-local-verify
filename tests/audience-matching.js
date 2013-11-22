@@ -7,11 +7,11 @@
 // test of audience matching
 
 const
-compareAudiences = require('../lib/compare-audiences.js'),
+compareAudiences = require('..').compareAudiences,
 should = require('should');
 
 describe('audience matching', function() {
-  it('should not regress', function(done) { 
+  it('should not regress', function(done) {
     var tests = {
       'http://fakesite.com and http://fakesite.com:80': true,
       'https://fakesite.com and https://fakesite.com:443': true,
@@ -23,7 +23,10 @@ describe('audience matching', function() {
       'http://fakesite.com:80 and http://fakesite.com:8000': false,
       'https://fakesite.com:443 and https://fakesite.com:9000': false,
 
-      'app://browser.gaiamobile.org and app://browser.gaiamobile.org:80': true
+      'app://browser.gaiamobile.org and app://browser.gaiamobile.org:80': true,
+
+      'http://example.com:8080 and example.com:8080': true,
+      'http://example.com:8080 and example.com': true
     };
 
     Object.keys(tests).forEach(function(test) {
