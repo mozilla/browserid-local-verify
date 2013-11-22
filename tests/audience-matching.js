@@ -11,7 +11,7 @@ compareAudiences = require('..').compareAudiences,
 should = require('should');
 
 describe('audience matching', function() {
-  it('should not regress', function(done) {
+  it('should flexibly match without regress', function(done) {
     var tests = {
       'http://fakesite.com and http://fakesite.com:80': true,
       'https://fakesite.com and https://fakesite.com:443': true,
@@ -39,6 +39,26 @@ describe('audience matching', function() {
       }
     });
 
+    done();
+  });
+
+  it('should catch malformed domains', function(done) {
+    compareAudiences("http://example.com", "example.com::80");
+    done();
+  });
+
+  it('should err on empty domains', function(done) {
+    compareAudiences("http://example.com", "");
+    done();
+  });
+
+  it('should catch mismatched schemes', function(done) {
+    compareAudiences("http://example.com", "https://example.com");
+    done();
+  });
+
+  it('should catch mismatched domains', function(done) {
+    compareAudiences("http://example.com", "http://foo.example.com");
     done();
   });
 });
