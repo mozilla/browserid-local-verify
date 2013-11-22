@@ -77,6 +77,7 @@ Or you can allocate a library instance.  This allows you to specify configuratio
 * **insecureSSL**: When true, invalid SSL certificates are ignored (NEVER use this in production).
 * **fallback**: A domain that is authoritative when support document lookup fails for the prinicpal email address's domain.
 * **trustedIssuers**: An array of domains that will be trusted to vouch for any identity, irregardless of the authority as determined from the email addresses domain.
+* **now**: over-ride the current time for purposes of assertion verification. (useful for testing)
 
 ## debug output
 
