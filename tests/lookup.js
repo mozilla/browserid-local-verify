@@ -42,6 +42,12 @@ describe('.well-known lookup transport tests (HTTP)', function() {
     }
   });
 
+  var badContentType = new BrowserID({
+    httpRequest: function(domain, path, cb) {
+      cb(null, 200, { 'Content-Type': 'text/plain' } , '{ "disabled": true }');
+    }
+  });
+
   it('test idps should start up', function(done) {
     async.parallel([
       function(cb) {
@@ -91,6 +97,14 @@ describe('.well-known lookup transport tests (HTTP)', function() {
     browserid.lookup(redirectidp.domain(), null, function(err) {
       should.exist(err);
       err.should.endWith('is not a browserid primary - redirection not supported for support documents');
+      done(null);
+    });
+  });
+
+  it('should fail on wrong content type', function(done) {
+    badContentType.lookup(redirectidp.domain(), null, function(err) {
+      should.exist(err);
+      (err).should.contain('non "application/json" response');
       done(null);
     });
   });
