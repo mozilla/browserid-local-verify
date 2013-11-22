@@ -4,6 +4,8 @@
 
 /* An abstraction around a client with a single identity. */
 
+/* jshint curly: false */
+
 const
 async = require('async'),
 jwcrypto = require('jwcrypto');

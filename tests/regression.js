@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /* global describe,it,require */
+/* jshint curly: false */
 
 const
 should = require('should'),

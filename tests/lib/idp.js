@@ -10,6 +10,8 @@
  * by the verification library.
  */
 
+/* jshint curly: false */
+
 const
 async = require('async'),
 https = require('https'),

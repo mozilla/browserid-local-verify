@@ -23,5 +23,6 @@
   "esnext": true,
   "shadow": false,
   "supernew": false,
-  "strict": false
+  "strict": false,
+  "curly": true
 }
