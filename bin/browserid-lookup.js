@@ -42,8 +42,11 @@ var browserid = new BrowserID({
 });
 
 if (argv.v) {
-  browserid.on('info', function(msg, data) {
-    console.log(msg, data);
+  browserid.on('debug', function(msg) {
+    console.log('debug'.warn + ':', msg);
+  });
+  browserid.on('metric', function(msg, value) {
+    console.log(msg.warn + ':', value);
   });
 }
 
@@ -51,7 +54,7 @@ browserid.lookup(domain, principalDomain, function(err, details) {
   if (err) {
     console.log("no support:".error, err);
   } else {
-    if (argv.v) console.log("\n\n");
+    if (argv.v) console.log("\n");
     // convert publicKey to displayable object
     details.publicKey = details.publicKey.toSimpleObject();
     console.log(details.authoritativeDomain.info, "is authoritative for", '@' + principalDomain.info, "email addresses:", JSON.stringify(details, null, 2).data);

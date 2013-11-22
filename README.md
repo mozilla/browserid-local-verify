@@ -79,16 +79,20 @@ Or you can allocate a library instance.  This allows you to specify configuratio
 * **trustedIssuers**: An array of domains that will be trusted to vouch for any identity, irregardless of the authority as determined from the email addresses domain.
 * **now**: over-ride the current time for purposes of assertion verification. (useful for testing)
 
-## debug output
+## debug output and metrics
 
 The BrowserID class emits events:
 
-    var b = new BrowserID({ httpTimeout: 20.0 });
-    
-    b.on('info', function() {
-      console.log('got some 411', arguments);
+    var b = new BrowserID();
+
+    b.on('debug', function(msg) {
+      console.log('debug output:', msg);
     });
-    
+
+    b.on('metric', function(metric, value) {
+      console.log(metric + ":", value);
+    });
+
     b.lookup("mozilla.org", function(err, details) {
       // ...
     });
