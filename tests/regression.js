@@ -76,7 +76,15 @@ describe('assertion regression tests', function() {
           (details.audience).should.equal(c.audience);
           if (c.email) (details.email).should.equal(c.email);
           (details.issuer).should.equal(c.issuer);
-          // XXX: test addition RP and IDP claims
+          // if additional idpClaims exist, test them here.
+          if (c.idpClaims) {
+            (details.idpClaims).should.exist;
+            (details.idpClaims).should.be.type('object');
+            Object.keys(c.idpClaims).forEach(function(claim) {
+              details.idpClaims.should.have.property(claim);
+              details.idpClaims[claim].should.equal(c.idpClaims[claim]);
+            });
+          }
           done(err);
         });
     });
