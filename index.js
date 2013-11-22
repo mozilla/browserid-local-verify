@@ -43,7 +43,7 @@ module.exports = Verifier;
 
 module.exports.lookup = function(args, domain, principalDomain, cb) {
   // support ommission of args param
-  if (arguments.length === 2) {
+  if (arguments.length === 3) {
     cb = principalDomain;
     principalDomain = domain;
     domain = args;
