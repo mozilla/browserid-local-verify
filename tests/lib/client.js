@@ -36,8 +36,12 @@ Client.prototype.email = function() {
 };
 
 // generate or return a signed certificate for this client
-Client.prototype.certificate = function(cb) {
-  if (this._certificate) return later(null, this._certificate);
+Client.prototype.certificate = function(args, cb) {
+  if (arguments.length === 1) {
+    cb = args;
+    args = {};
+  }
+  if (this._certificate) return later(cb, null, this._certificate);
   var self = this;
 
   jwcrypto.generateKeypair({
@@ -60,7 +64,7 @@ Client.prototype.certificate = function(cb) {
       issuer: self.args.idp.domain(),
       issuedAt: issuedAt,
       expiresAt:  expiresAt
-    }, null, self.args.idp.privateKey(), function(err, cert) {
+    }, args.claims, self.args.idp.privateKey(), function(err, cert) {
       self._certificate = cert;
       cb(err, cert);
     });
@@ -88,6 +92,5 @@ Client.prototype.assertion = function(args, cb) {
       });
   });
 };
-
 
 module.exports = Client;
