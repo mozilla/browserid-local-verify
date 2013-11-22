@@ -41,7 +41,9 @@ This library is targeted at robust local verification, to subsume all of the fea
 
     var browserid = require('browserid-local-verify');
 
-    browserid.lookup("mozilla.org", function(err, details) {
+    browserid.lookup({
+      domain: "mozilla.org"
+    }, function(err, details) {
       // check err
       console.log(details.authority);
       console.log(details.pubKey);
@@ -52,22 +54,25 @@ XXX: more to come, this is just a strawthing so far.
 
 ## configuration
 
-To configure the library you can either pass an object as the first parameter to a supported function:
+All functions accept configuration parameters documented below.
 
-    browserid.lookup({ httpProxy: 'http://example.com:8080' }, "mozilla.org", function(err, details) {
+    browserid.lookup({
+      httpTimeout: 5.0,
+      domain: "mozilla.org"
+    }, function(err, details) {
       ...
     });
 
-Or you can allocate a library instance.  This allows you to specify configuration once at instantiation time:
+Or you can allocate a library instance.  This allows you to specify configuration once at instantiation time.  Any configuration parameters or function arguments may be specified a instantiation time and become the default for subsequently invoked functions:
 
     var BrowserID = require('browserid-local-verify');
-    
+
     var b = new BrowserID({ httpTimeout: 20.0 });
-    b.lookup("mozilla.org", function(err, details) {
+    b.lookup({ domain: "mozilla.org" }, function(err, details) {
       // ...
     });
 
-## knobs and switches:
+## Configuration and Arguments
 
 * **httpRequest**: A function that allows the client to control how http requests are performed.
   * input arguments: (domain, path, callback)
@@ -78,6 +83,15 @@ Or you can allocate a library instance.  This allows you to specify configuratio
 * **fallback**: A domain that is authoritative when support document lookup fails for the prinicpal email address's domain.
 * **trustedIssuers**: An array of domains that will be trusted to vouch for any identity, irregardless of the authority as determined from the email addresses domain.
 * **now**: over-ride the current time for purposes of assertion verification. (useful for testing)
+
+### lookup specific
+
+* **domain**: the domain for which we should lookup the support document
+* **principalDomain**: the domain of the email address for which we should discover the support document of the authority
+
+### verification specific
+
+XXX
 
 ## debug output and metrics
 

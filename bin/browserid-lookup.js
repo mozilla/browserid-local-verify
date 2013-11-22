@@ -38,7 +38,9 @@ var domain = argv._[0];
 var principalDomain = argv.p || domain;
 
 var browserid = new BrowserID({
-  fallback: argv.fallback
+  fallback: argv.fallback,
+  domain: domain,
+  principalDomain: principalDomain
 });
 
 if (argv.v) {
@@ -50,7 +52,7 @@ if (argv.v) {
   });
 }
 
-browserid.lookup(domain, principalDomain, function(err, details) {
+browserid.lookup(function(err, details) {
   if (err) {
     console.log("no support:".error, err);
   } else {

@@ -21,7 +21,7 @@ describe('.well-known lookup, malformed', function() {
     x['public-key'].n += "bogus";
     idp.wellKnown(x);
 
-    browserid.lookup({ insecureSSL: true }, idp.domain(), null, function(err) {
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
       (err).should.contain('mal-formed public key');
 
       // repair well-known
@@ -36,7 +36,7 @@ describe('.well-known lookup, malformed', function() {
     delete x.provisioning;
     idp.wellKnown(x);
 
-    browserid.lookup({ insecureSSL: true }, idp.domain(), null, function(err) {
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
       (err).should.contain("missing required 'provisioning'");
 
       // repair well-known
@@ -49,7 +49,7 @@ describe('.well-known lookup, malformed', function() {
   it('should properly parse disabled: true', function(done) {
     idp.wellKnown({ disabled: true });
 
-    browserid.lookup({ insecureSSL: true }, idp.domain(), null, function(err, details) {
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err, details) {
       should.not.exist(err);
       details.disabled.should.equal(true);
 
