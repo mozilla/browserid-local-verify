@@ -33,6 +33,9 @@ describe('key size and type', function() {
   var browserid = new BrowserID({ insecureSSL: true});
 
   it('all permutations (user / IdP) should pass basic assertion verification', function(done) {
+    // on travis sometimes the default timeout (2s) just isn't enough
+    this.timeout(10000);
+
     // for each key size and type...
     async.each(keyTypes, function(idpkt, done) {
       // we'll allocate an IdP with a domain key of that size/type...
