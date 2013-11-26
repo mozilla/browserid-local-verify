@@ -9,7 +9,7 @@
 
 const
 async = require('async'),
-  IdP = require('./idp.js').IdP;
+  IdP = require('./idp.js');
 
 // a member function of the array returned from module.exports.  This allows stopping
 // all members of a delegation chain simultaneously.

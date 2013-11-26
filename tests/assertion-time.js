@@ -11,7 +11,7 @@
 const
 should = require('should'),
 BrowserID = require('../'),
-IdP = require('./lib/idp.js').IdP,
+IdP = require('./lib/idp.js'),
 Client = require('./lib/client.js');
 
 function secsFromNow(adj) {

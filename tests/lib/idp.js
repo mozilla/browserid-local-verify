@@ -174,4 +174,4 @@ IdP.prototype.stop = function(cb) {
   else this._server.close(cb);
 };
 
-exports.IdP = IdP;
+module.exports = IdP;

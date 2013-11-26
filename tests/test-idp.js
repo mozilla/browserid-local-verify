@@ -6,7 +6,7 @@
 
 const
 should = require('should'),
-IdP = require('./lib/idp.js').IdP,
+IdP = require('./lib/idp.js'),
 browserid = require('..');
 
 describe('test idp implementation', function() {

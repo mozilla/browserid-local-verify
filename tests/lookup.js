@@ -7,7 +7,7 @@
 const
 should = require('should'),
 BrowserID = require('../'),
-IdP = require('./lib/idp.js').IdP,
+IdP = require('./lib/idp.js'),
 async = require('async');
 
 describe('.well-known lookup transport tests (HTTP)', function() {

@@ -6,7 +6,7 @@
 
 const
 should = require('should'),
-IdP = require('./lib/idp').IdP,
+IdP = require('./lib/idp'),
 browserid = require('..');
 
 describe('.well-known lookup, malformed', function() {
