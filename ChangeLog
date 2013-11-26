@@ -1,2 +1,7 @@
+v0.0.2 -
+	* fix sporadic travis failures
+	* in code rename jwtRegisteredClaimNames to registeredClaimNames
+	* library outputs userClaims instead of uaClaims
+
 v0.0.1 -
 	* Initial version.
