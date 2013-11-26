@@ -6,7 +6,6 @@
   "repository": {
     "url": "https://github.com/mozilla/browserid-local-verify"
   },
-  "main": "clortho",
   "engines": {
     "node": ">=0.8.0"
   },
