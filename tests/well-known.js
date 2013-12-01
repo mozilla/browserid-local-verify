@@ -46,6 +46,21 @@ describe('.well-known lookup, malformed', function() {
     });
   });
 
+  it('should reject invalid paths', function(done) {
+    var x = idp.wellKnown();
+    x.provisioning = 'foo';
+    idp.wellKnown(x);
+
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
+      (err).should.contain("paths must start with a slash");
+
+      // repair well-known
+      idp.wellKnown(null);
+
+      done();
+    });
+  });
+
   it('should properly parse disabled: true', function(done) {
     idp.wellKnown({ disabled: true });
 
