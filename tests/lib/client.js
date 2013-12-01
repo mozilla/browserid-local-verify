@@ -61,7 +61,7 @@ Client.prototype.certificate = function(args, cb) {
 
     jwcrypto.cert.sign({
       publicKey: self._publicKey,
-      principal: { email: self.args.email }
+      principal: self.args.principal || { email: self.args.email }
     }, {
       issuer: self.args.idp.domain(),
       issuedAt: issuedAt,
