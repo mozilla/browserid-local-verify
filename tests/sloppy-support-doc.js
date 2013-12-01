@@ -34,8 +34,8 @@ describe('conditionally support sloppy well-known documents', function() {
     BrowserID.lookup({
       insecureSSL: true,
       httpTimeout: 0.1, // fail faster for prompt tests
-      domain: fallback.domain(),
-      allowURLOmission: true
+      fallback: fallback.domain(),
+      domain: "example.com"
     }, function(err) {
       done(err);
     });
