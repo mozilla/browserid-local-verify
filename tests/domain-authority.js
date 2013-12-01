@@ -8,11 +8,7 @@ const
 should = require('should'),
 BrowserID = require('../'),
 IdP = require('./lib/idp.js'),
-Client = require('./lib/client.js'),
-jwcrypto = require('jwcrypto');
-
-require("jwcrypto/lib/algs/rs");
-require("jwcrypto/lib/algs/ds");
+Client = require('./lib/client.js');
 
 describe('domain authority', function() {
   var idp = new IdP();
