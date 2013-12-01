@@ -1,3 +1,6 @@
+v0.0.5 -
+	* client testing tool now allows over-riding of principal
+
 v0.0.4 -
 	* now by default only the fallback is exempt from providing auth/prov urls
 	* improved code instrumentation
