@@ -37,7 +37,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain("missing required 'provisioning'");
+      (err).should.contain("missing required property: 'provisioning'");
 
       // repair well-known
       idp.wellKnown(null);
