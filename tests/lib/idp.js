@@ -71,13 +71,11 @@ IdP.prototype.delegation = function(domain) {
   return (this.args.delegation = domain || this.args.delegation);
 };
 
-// the domain to whom this domain should delegate
 IdP.prototype.delay = function(delay) {
   if (typeof delay === 'number') this.args.delay = delay;
   return this.args.delay;
 };
 
-// the domain to whom this domain should delegate
 IdP.prototype.wellKnown = function(obj) {
   if (obj !== undefined) this.args.wellKnown = obj;
   return this.args.wellKnown || {
