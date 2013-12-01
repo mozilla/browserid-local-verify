@@ -1,3 +1,8 @@
+v0.0.4 -
+	* now by default only the fallback is exempt from providing auth/prov urls
+	* improved code instrumentation
+	* improved error messages
+
 v0.0.3 -
 	* require /testing to include tools to facilitate automated unit testing
 
