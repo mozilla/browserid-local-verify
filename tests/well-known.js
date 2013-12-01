@@ -46,6 +46,21 @@ describe('.well-known lookup, malformed', function() {
     });
   });
 
+  it('should reject invalid authorities', function(done) {
+    var x = idp.wellKnown();
+    x.authority = 'https://example.com';
+    idp.wellKnown(x);
+
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
+      (err).should.contain("the authority is not a valid hostname");
+
+      // repair well-known
+      idp.wellKnown(null);
+
+      done();
+    });
+  });
+
   it('should properly parse disabled: true', function(done) {
     idp.wellKnown({ disabled: true });
 
