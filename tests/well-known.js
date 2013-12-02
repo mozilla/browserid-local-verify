@@ -60,6 +60,22 @@ describe('.well-known lookup, malformed', function() {
     });
   });
 
+  it('should properly parse disabled: false', function(done) {
+    var x = idp.wellKnown();
+    x.disabled = false;
+    idp.wellKnown(x);
+
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err, details) {
+      should.not.exist(err);
+      should.not.exist(details.disabled);
+
+      // repair well-known
+      idp.wellKnown(null);
+
+      done();
+    });
+  });
+
   it('shutdown of IdP should succeed', function(done) {
     idp.stop(done);
   });
