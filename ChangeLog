@@ -1,3 +1,6 @@
+v0.0.6 -
+	* bugfix: .fallback as an argument to .verify makes it through to .lookup for sloppy support docs.
+
 v0.0.5 -
 	* client testing tool now allows over-riding of principal
 
