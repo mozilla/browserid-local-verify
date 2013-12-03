@@ -8,36 +8,44 @@ const
 should = require('should'),
 BrowserID = require('../'),
 IdP = require('./lib/idp.js'),
-Client = require('./lib/client.js'),
-jwcrypto = require('jwcrypto');
-
-require("jwcrypto/lib/algs/rs");
-require("jwcrypto/lib/algs/ds");
+Client = require('./lib/client.js');
 
 describe('conditionally support sloppy well-known documents', function() {
   // a sloppy fallback that has no auth nor prov urls
-  var fallback = new IdP({
-    wellKnown: {
-      "public-key": {
-        "algorithm": "RS",
-        "n":"13847129683346859941264989674568093903817733347507886483659072610887035115410884319746624743249873208613096773517649937232300491784030920639144918224162068671400821902037583483041672764299306953103026060664680502797174343514269310587598551716299517313631315828939375461655862731946934365379077922079015460490916404855526919865126417791640455294879012843461329126172228137733279330910651237329531496694237928709223634994176813985784350468828176558279934807392490900567770727183145892059849913866957956369313527767655739421507886573261431996201380835691492402207640696740537706612595819413637640492969110348638013564489",
-        "e":"65537"
-      }
-    }
-  });
+  var fallback = new IdP();
 
-  it('test idps should start up', function(done) {
-    fallback.start(done);
+  it('fallback idp should start up', function(done) {
+    fallback.start(function(err) {
+      should.not.exist(err);
+      fallback.wellKnown({
+        "public-key": fallback.publicKey().toSimpleObject()
+      });
+      done(err);
+    });
   });
 
   it('assertion for fallback vouched email should succeed', function(done) {
-    BrowserID.lookup({
-      insecureSSL: true,
-      httpTimeout: 0.1, // fail faster for prompt tests
-      fallback: fallback.domain(),
-      domain: "example.com"
-    }, function(err) {
-      done(err);
+    var client = new Client({
+      idp: fallback,
+      email: 'test@example.com'
+    });
+
+    client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
+      var browserid = new BrowserID({
+        insecureSSL: true,
+        httpTimeout: 0.1 // fail faster for prompt tests
+      });
+
+      browserid.verify({
+        assertion: assertion,
+        audience: 'http://example.com',
+        fallback: fallback.domain()
+      }, function(err, r) {
+        should.not.exist(err);
+        (r.email).should.equal('test@example.com');
+        (r.audience).should.equal('http://example.com');
+        done(err);
+      });
     });
   });
 
