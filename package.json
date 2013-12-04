@@ -13,6 +13,7 @@
   "dependencies": {
     "jwcrypto": "git://github.com/mozilla/jwcrypto#8e3037a",
     "async": "0.2.9",
+    "dbug": "0.1.2",
     "urlparse": "0.0.1",
     "optimist": "0.6.0",
     "colors": "0.6.2",
