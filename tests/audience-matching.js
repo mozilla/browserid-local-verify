@@ -26,7 +26,7 @@ describe('audience matching', function() {
       'app://browser.gaiamobile.org and app://browser.gaiamobile.org:80': true,
 
       'http://example.com:8080 and example.com:8080': true,
-      'http://example.com:8080 and example.com': true
+      'http://example.com:8080 and example.com': false
     };
 
     Object.keys(tests).forEach(function(test) {
