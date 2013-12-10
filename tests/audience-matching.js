@@ -61,4 +61,9 @@ describe('audience matching', function() {
     compareAudiences("http://example.com", "http://foo.example.com");
     done();
   });
+
+  it('should catch unsupported schemes', function(done) {
+    compareAudiences("http://example.com", "ftp://example.com");
+    done();
+  });
 });
