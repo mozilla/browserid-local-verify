@@ -204,6 +204,14 @@ describe('.well-known lookup transport tests (HTTP)', function() {
     });
   });
 
+  it('should fail on invalid domains', function(done) {
+    browserid.lookup({ domain: 'http://example.com' }, function(err) {
+      should.exist(err);
+      (err).should.startWith('invalid domain:');
+      done(null);
+    });
+  });
+
   it('test servers should shut down', function(done) {
     async.parallel([
       function(cb) {
