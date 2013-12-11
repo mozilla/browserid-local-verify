@@ -79,7 +79,7 @@ Client.prototype.assertion = function(args, cb) {
   self.certificate(function(err) {
     if (err) return cb(err);
 
-    // NOTE: historically assertions have not contained issuedAt, but jwcrtpto
+    // NOTE: historically assertions have not contained issuedAt, but jwcrypto
     // will check it if provided.  we hope it becomes part of the spec and test
     // here.
     var issuedAt = (args.issueTime * 1000) || new Date().getTime();
