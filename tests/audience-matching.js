@@ -26,7 +26,7 @@ describe('audience matching', function() {
       'app://browser.gaiamobile.org and app://browser.gaiamobile.org:80': true,
 
       'http://example.com:8080 and example.com:8080': true,
-      'http://example.com:8080 and example.com': true
+      'http://example.com:8080 and example.com': false
     };
 
     Object.keys(tests).forEach(function(test) {
@@ -59,6 +59,11 @@ describe('audience matching', function() {
 
   it('should catch mismatched domains', function(done) {
     compareAudiences("http://example.com", "http://foo.example.com");
+    done();
+  });
+
+  it('should catch unsupported schemes', function(done) {
+    compareAudiences("http://example.com", "ftp://example.com");
     done();
   });
 });
