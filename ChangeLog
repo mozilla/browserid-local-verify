@@ -1,3 +1,6 @@
+v0.0.8 -
+	* augment 'tests/lib/client', allow caller to control whether .sub is present in cert
+
 v0.0.7 -
 	* support for "new data formats"
 
