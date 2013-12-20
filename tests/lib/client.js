@@ -59,9 +59,11 @@ Client.prototype.certificate = function(args, cb) {
     // cert valid for client specified duration or 60 minutes by default
     var expiresAt = (issuedAt + (self.args.certificateDuration || 60 * 60));
 
+    var subject = self.args.principal ? self.args.principal.email : self.args.email;
+
     jwcrypto.cert.sign({
       publicKey: self._publicKey,
-      principal: self.args.principal || { email: self.args.email }
+      sub: subject
     }, {
       issuer: self.args.idp.domain(),
       issuedAt: issuedAt,
