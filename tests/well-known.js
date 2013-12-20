@@ -60,6 +60,52 @@ describe('.well-known lookup, malformed', function() {
     });
   });
 
+  it('should properly parse disabled: false', function(done) {
+    var x = idp.wellKnown();
+    x.disabled = false;
+    idp.wellKnown(x);
+
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err, details) {
+      should.not.exist(err);
+      should.not.exist(details.disabled);
+
+      // repair well-known
+      idp.wellKnown(null);
+
+      done();
+    });
+  });
+
+  it('should properly parse disabled: 0', function(done) {
+    var x = idp.wellKnown();
+    x.disabled = 0;
+    idp.wellKnown(x);
+
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
+      (err).should.contain('disabled must be either true or false');
+
+      // repair well-known
+      idp.wellKnown(null);
+
+      done();
+    });
+  });
+
+  it('should properly parse disabled: "true"', function(done) {
+    var x = idp.wellKnown();
+    x.disabled = "true";
+    idp.wellKnown(x);
+
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
+      (err).should.contain('disabled must be either true or false');
+
+      // repair well-known
+      idp.wellKnown(null);
+
+      done();
+    });
+  });
+
   it('shutdown of IdP should succeed', function(done) {
     idp.stop(done);
   });
