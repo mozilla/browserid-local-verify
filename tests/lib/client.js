@@ -33,7 +33,8 @@ function later(cb /* args */) {
   });
 }
 
-Client.prototype.email = function() {
+Client.prototype.email = function(arg) {
+  if (arg !== undefined) this.args.email = arg;
   return this.args.email || null;
 };
 
@@ -59,19 +60,27 @@ Client.prototype.certificate = function(args, cb) {
     // cert valid for client specified duration or 60 minutes by default
     var expiresAt = (issuedAt + (self.args.certificateDuration || 60 * 60));
 
-    var subject = self.args.principal ? self.args.principal.email : self.args.email;
-
-    jwcrypto.cert.sign({
+    var params = {
       publicKey: self._publicKey,
-      sub: subject
-    }, {
-      issuer: self.args.idp.domain(),
-      issuedAt: issuedAt,
-      expiresAt:  expiresAt
-    }, args.claims, self.args.idp.privateKey(), function(err, cert) {
-      self._certificate = cert;
-      cb(err, cert);
-    });
+    };
+
+    if (self.args.email) {
+      params.sub = self.args.email;
+    }
+    if (self.args.principal) {
+      params.principal = self.args.principal;
+    }
+
+    jwcrypto.cert.sign(
+      params,
+      {
+        issuer: self.args.idp.domain(),
+        issuedAt: issuedAt,
+        expiresAt:  expiresAt
+      }, args.claims, self.args.idp.privateKey(), function(err, cert) {
+        self._certificate = cert;
+        cb(err, cert);
+      });
   });
 };
 
