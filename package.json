@@ -11,7 +11,7 @@
   },
   "main": "lib/browserid-local-verify",
   "dependencies": {
-    "jwcrypto": "git://github.com/mozilla/jwcrypto#8e3037a",
+    "jwcrypto": "dev",
     "async": "0.2.9",
     "urlparse": "0.0.1",
     "optimist": "0.6.0",
