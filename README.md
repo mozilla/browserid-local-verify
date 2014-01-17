@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/lloyd/browserid-local-verify.png?branch=master)](https://travis-ci.org/lloyd/browserid-local-verify)
+[![Build Status](https://travis-ci.org/mozilla/browserid-local-verify.png?branch=master)](https://travis-ci.org/mozilla/browserid-local-verify)
 
 (status:  **experimental**)
 
