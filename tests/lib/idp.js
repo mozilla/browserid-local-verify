@@ -33,7 +33,7 @@ function IdP(args) {
   this.args.delegation = this.args.delegation || null;
 
   // allow algorithm specification as (i.e.) 'rsa' or 'RS'
-  this.args.algorithm = this.args.algorithm.toUpperCase().substr(0,2);
+  this.args.algorithm = this.args.algorithm.toUpperCase();
 
   if (args.wellKnown) this.wellKnown(args.wellKnown);
 }
