@@ -77,6 +77,50 @@ describe('assertion verification, basic', function() {
     });
   });
 
+  it('validation of assertions with an HTTPS audience should work', function(done) {
+    client = new Client({
+      idp: idp,
+      email: 'test@example.com'
+    });
+
+    client.assertion({ audience: 'https://example.com' }, function(err, assertion) {
+      browserid.verify({
+        fallback: idp.domain(),
+        httpTimeout: 0.1,
+        assertion: assertion,
+        audience: 'https://example.com'
+      }, function(err, details) {
+        should.not.exist(err);
+        (details).should.be.type('object');
+        (details.audience).should.equal('https://example.com');
+        (details.email).should.equal(client.email());
+        done(err);
+      });
+    });
+  });
+
+  it('validation of assertions with an app audience should work', function(done) {
+    client = new Client({
+      idp: idp,
+      email: 'test@example.com'
+    });
+
+    client.assertion({ audience: 'app://sillybirds.net' }, function(err, assertion) {
+      browserid.verify({
+        fallback: idp.domain(),
+        httpTimeout: 0.1,
+        assertion: assertion,
+        audience: 'app://sillybirds.net'
+      }, function(err, details) {
+        should.not.exist(err);
+        (details).should.be.type('object');
+        (details.audience).should.equal('app://sillybirds.net');
+        (details.email).should.equal(client.email());
+        done(err);
+      });
+    });
+  });
+
   it('test idp should shut down', function(done) {
     idp.stop(done);
   });
