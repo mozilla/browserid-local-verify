@@ -77,6 +77,23 @@ describe('assertion verification, basic', function() {
     });
   });
 
+  it('validation of chained assertions should fail', function(done) {
+    client = new Client({ idp: idp });
+
+    // allocate a new "client".  She has an email and idp as specified below
+    // generate an assertion (and all pre-requisites)
+    client.chainedAssertion({ audience: 'http://example.com' }, function(err, assertion) {
+      browserid.verify({
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err) {
+        should.exists(err);
+        err.should.equal('certificate chaining is not yet allowed');
+        done();
+      });
+    });
+  });
+
   it('test idp should shut down', function(done) {
     idp.stop(done);
   });
