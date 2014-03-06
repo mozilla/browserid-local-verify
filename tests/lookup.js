@@ -116,7 +116,7 @@ describe('.well-known lookup transport tests (HTTP)', function() {
     });
   });
 
-  it('should use proxy server when $http_proxy is set', function(done) {
+  it('should use proxy server when $https_proxy is set', function(done) {
     var origHttpsProxy = process.env.https_proxy || '';
     process.env.https_proxy = proxy.url();
     proxy.clearNumRequests();
@@ -125,6 +125,32 @@ describe('.well-known lookup transport tests (HTTP)', function() {
       details.disabled.should.equal(true);
       should(proxy.numRequests()).equal(1);
       process.env.https_proxy = origHttpsProxy;
+      done(err);
+    });
+  });
+
+  it('should use proxy server when $HTTPS_PROXY is set', function(done) {
+    var origHttpsProxy = process.env.HTTPS_PROXY || '';
+    process.env.HTTPS_PROXY = proxy.url();
+    proxy.clearNumRequests();
+    browserid.lookup({ domain: disabledidp.domain() }, function(err, details) {
+      should.not.exist(err);
+      details.disabled.should.equal(true);
+      should(proxy.numRequests()).equal(1);
+      process.env.HTTPS_PROXY = origHttpsProxy;
+      done(err);
+    });
+  });
+
+  it('should not use proxy server when $http_proxy is set', function(done) {
+    var origHttpProxy = process.env.http_proxy || '';
+    process.env.http_proxy = proxy.url();
+    proxy.clearNumRequests();
+    browserid.lookup({ domain: disabledidp.domain() }, function(err, details) {
+      should.not.exist(err);
+      details.disabled.should.equal(true);
+      should(proxy.numRequests()).equal(0);
+      process.env.http_proxy = origHttpProxy;
       done(err);
     });
   });
