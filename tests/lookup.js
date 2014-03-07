@@ -5,9 +5,11 @@
 /* global describe,it,require */
 
 const
+url = require('url'),
 should = require('should'),
 BrowserID = require('../'),
 IdP = require('./lib/idp.js'),
+Proxy = require('./lib/proxy.js'),
 async = require('async');
 
 describe('.well-known lookup transport tests (HTTP)', function() {
@@ -48,7 +50,10 @@ describe('.well-known lookup transport tests (HTTP)', function() {
     }
   });
 
-  it('test idps should start up', function(done) {
+  // A local proxy server.
+  var proxy = new Proxy();
+
+  it('test servers should start up', function(done) {
     async.parallel([
       function(cb) {
         slowidp.start(cb);
@@ -58,6 +63,9 @@ describe('.well-known lookup transport tests (HTTP)', function() {
       },
       function(cb) {
         redirectidp.start(cb);
+      },
+      function(cb) {
+        proxy.start(cb);
       }
     ], done);
   });
@@ -108,7 +116,95 @@ describe('.well-known lookup transport tests (HTTP)', function() {
     });
   });
 
-  it('test idp should shut down', function(done) {
+  it('should use proxy server when $https_proxy is set', function(done) {
+    var origHttpsProxy = process.env.https_proxy || '';
+    process.env.https_proxy = proxy.url();
+    proxy.clearNumRequests();
+    browserid.lookup({ domain: disabledidp.domain() }, function(err, details) {
+      should.not.exist(err);
+      details.disabled.should.equal(true);
+      should(proxy.numRequests()).equal(1);
+      process.env.https_proxy = origHttpsProxy;
+      done(err);
+    });
+  });
+
+  it('should use proxy server when $HTTPS_PROXY is set', function(done) {
+    var origHttpsProxy = process.env.HTTPS_PROXY || '';
+    process.env.HTTPS_PROXY = proxy.url();
+    proxy.clearNumRequests();
+    browserid.lookup({ domain: disabledidp.domain() }, function(err, details) {
+      should.not.exist(err);
+      details.disabled.should.equal(true);
+      should(proxy.numRequests()).equal(1);
+      process.env.HTTPS_PROXY = origHttpsProxy;
+      done(err);
+    });
+  });
+
+  it('should not use proxy server when $http_proxy is set', function(done) {
+    var origHttpProxy = process.env.http_proxy || '';
+    process.env.http_proxy = proxy.url();
+    proxy.clearNumRequests();
+    browserid.lookup({ domain: disabledidp.domain() }, function(err, details) {
+      should.not.exist(err);
+      details.disabled.should.equal(true);
+      should(proxy.numRequests()).equal(0);
+      process.env.http_proxy = origHttpProxy;
+      done(err);
+    });
+  });
+
+  it('should bypass proxy server when $no_proxy is set to *', function(done) {
+    var origHttpsProxy = process.env.https_proxy || '';
+    var origNoProxy = process.env.no_proxy || '';
+    process.env.https_proxy = proxy.url();
+    process.env.no_proxy = '*';
+    proxy.clearNumRequests();
+    browserid.lookup({ domain: disabledidp.domain() }, function(err, details) {
+      should.not.exist(err);
+      details.disabled.should.equal(true);
+      should(proxy.numRequests()).equal(0);
+      process.env.no_proxy = origNoProxy;
+      process.env.https_proxy = origHttpsProxy;
+      done(err);
+    });
+  });
+
+  it('should bypass proxy server when host is in $no_proxy', function(done) {
+    var origHttpsProxy = process.env.https_proxy || '';
+    var origNoProxy = process.env.no_proxy || '';
+    var idpHostname = url.parse(disabledidp.url()).hostname;
+    process.env.https_proxy = proxy.url();
+    process.env.no_proxy = 'example.com, ' + idpHostname;
+    proxy.clearNumRequests();
+    browserid.lookup({ domain: disabledidp.domain() }, function(err, details) {
+      should.not.exist(err);
+      details.disabled.should.equal(true);
+      should(proxy.numRequests()).equal(0);
+      process.env.no_proxy = origNoProxy;
+      process.env.https_proxy = origHttpsProxy;
+      done(err);
+    });
+  });
+
+  it('should use proxy server when host is not in $no_proxy', function(done) {
+    var origHttpsProxy = process.env.https_proxy || '';
+    var origNoProxy = process.env.no_proxy || '';
+    process.env.https_proxy = proxy.url();
+    process.env.no_proxy = 'example1.com, example1.com';
+    proxy.clearNumRequests();
+    browserid.lookup({ domain: disabledidp.domain() }, function(err, details) {
+      should.not.exist(err);
+      details.disabled.should.equal(true);
+      should(proxy.numRequests()).equal(1);
+      process.env.no_proxy = origNoProxy;
+      process.env.https_proxy = origHttpsProxy;
+      done(err);
+    });
+  });
+
+  it('test servers should shut down', function(done) {
     async.parallel([
       function(cb) {
         slowidp.stop(cb);
@@ -118,6 +214,9 @@ describe('.well-known lookup transport tests (HTTP)', function() {
       },
       function(cb) {
         redirectidp.stop(cb);
+      },
+      function(cb) {
+        proxy.stop(cb);
       }
     ], done);
   });
