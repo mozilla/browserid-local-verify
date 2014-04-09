@@ -90,7 +90,7 @@ Client.prototype.assertion = function(args, cb) {
   self.certificate(function(err) {
     if (err) return cb(err);
 
-    // NOTE: historically assertions have not contained issuedAt, but jwcrtpto
+    // NOTE: historically assertions have not contained issuedAt, but jwcrypto
     // will check it if provided.  we hope it becomes part of the spec and test
     // here.
     var issuedAt = (args.issueTime * 1000) || new Date().getTime();
@@ -104,6 +104,69 @@ Client.prototype.assertion = function(args, cb) {
         cb(null, assertion);
       });
   });
+};
+
+// generate an assertion with two certificates that is otherwise valid
+Client.prototype.chainedAssertion = function(args, cb) {
+  var self = this;
+
+  var issuedAt = (self.args.certificateIssueTime * 1000) || new Date().getTime();
+  var expiresAt = (issuedAt + (self.args.certificateDuration || 60 * 60));
+
+  jwcrypto.generateKeypair({
+    algorithm: self.args.algorithm,
+    keysize: self.args.keysize
+  }, function(err, kp) {
+    if (err) return cb(err);
+    var pubKey1 = kp.publicKey;
+    var secKey1 = kp.secretKey;
+
+    jwcrypto.cert.sign({
+      publicKey: pubKey1,
+      principal: { email: self.args.email }
+    }, {
+      issuer: self.args.idp.domain(),
+      issuedAt: issuedAt,
+      expiresAt:  expiresAt
+    }, args.claims, self.args.idp.privateKey(), function(err, cert) {
+      var cert1 = cert; // signed by the IdP
+
+      jwcrypto.generateKeypair({
+        algorithm: self.args.algorithm,
+        keysize: self.args.keysize
+      }, function(err, kp) {
+        if (err) return cb(err);
+        var pubKey2 = kp.publicKey;
+        var secKey2 = kp.secretKey;
+
+        jwcrypto.cert.sign({
+          publicKey: pubKey2,
+          principal: { email: 'bogus@example.com' }
+        }, {
+          issuer: self.args.email,
+          issuedAt: issuedAt,
+          expiresAt:  expiresAt
+        }, args.claims, secKey1, function(err, cert) {
+          var cert2 = cert; // signed by the key that was signed by the IdP
+
+          self.certificate(function(err) {
+            if (err) return cb(err);
+
+            jwcrypto.assertion.sign(
+              {}, { audience: args.audience, expiresAt: expiresAt },
+              secKey2,
+              function(err, signedContents) {
+                if (err) return cb(err);
+                var assertion = jwcrypto.cert.bundle([cert1, cert2], signedContents);
+                cb(null, assertion);
+              });
+          });
+        });
+      });
+    });
+  });
+
+
 };
 
 module.exports = Client;
