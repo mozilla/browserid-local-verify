@@ -1,10 +1,8 @@
 [![Build Status](https://travis-ci.org/mozilla/browserid-local-verify.png?branch=master)](https://travis-ci.org/mozilla/browserid-local-verify)
 
-(status:  **experimental**)
-
 # A node.js BrowserID verification library
 
-This repository contains a node.js library for local verification of BrowserID assertions.
+This repository contains a node.js library for local verification of BrowserID assertions. It is used by [this standalone verifier](https://github.com/mozilla/browserid-verifier).
 
 The library has the following scope and features:
 
