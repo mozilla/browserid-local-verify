@@ -44,7 +44,7 @@ describe('audience matching', function() {
 
   it('should catch malformed domains', function(done) {
     var err = compareAudiences("http://example.com", "example.com::80");
-    should(err).equal("domain mismatch");
+    should(err).equal("has non-empty path");
     done();
   });
 
