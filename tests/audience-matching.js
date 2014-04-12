@@ -43,27 +43,32 @@ describe('audience matching', function() {
   });
 
   it('should catch malformed domains', function(done) {
-    compareAudiences("http://example.com", "example.com::80");
+    var err = compareAudiences("http://example.com", "example.com::80");
+    should(err).equal("domain mismatch");
     done();
   });
 
   it('should err on empty domains', function(done) {
-    compareAudiences("http://example.com", "");
+    var err = compareAudiences("http://example.com", "");
+    should(err).equal("domain mismatch");
     done();
   });
 
   it('should catch mismatched schemes', function(done) {
-    compareAudiences("http://example.com", "https://example.com");
+    var err = compareAudiences("http://example.com", "https://example.com");
+    should(err).equal("scheme mismatch");
     done();
   });
 
   it('should catch mismatched domains', function(done) {
-    compareAudiences("http://example.com", "http://foo.example.com");
+    var err = compareAudiences("http://example.com", "http://foo.example.com");
+    should(err).equal("domain mismatch");
     done();
   });
 
   it('should catch unsupported schemes', function(done) {
-    compareAudiences("http://example.com", "ftp://example.com");
+    var err = compareAudiences("http://example.com", "ftp://example.com");
+    should(err).equal("domain mismatch");
     done();
   });
 });
