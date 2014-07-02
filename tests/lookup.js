@@ -76,7 +76,7 @@ describe('.well-known lookup transport tests (HTTP)', function() {
       details.disabled.should.equal(true);
       details.delegationChain.should.be.instanceof(Array).and.have.lengthOf(1);
       details.delegationChain[0].should.equal(disabledidp.domain());
-      details.authoritativeDomain.should.equal(disabledidp.domain());
+      should.not.exist(details.authoritativeDomain);
       done(err);
     });
   });
@@ -87,7 +87,7 @@ describe('.well-known lookup transport tests (HTTP)', function() {
       details.disabled.should.equal(true);
       details.delegationChain.should.be.instanceof(Array).and.have.lengthOf(1);
       details.delegationChain[0].should.equal('example.com');
-      details.authoritativeDomain.should.equal('example.com');
+      should.not.exist(details.authoritativeDomain);
       done(err);
     });
   });
