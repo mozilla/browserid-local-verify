@@ -11,7 +11,7 @@
   },
   "main": "lib/browserid-local-verify",
   "dependencies": {
-    "jwcrypto": "dev",
+    "jwcrypto": "0.5.1",
     "async": "0.2.9",
     "dbug": "0.4.1",
     "urlparse": "0.0.1",
