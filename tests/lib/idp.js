@@ -16,12 +16,12 @@ const
 async = require('async'),
 https = require('https'),
 fs = require('fs'),
-jwcrypto = require('jwcrypto'),
+jwcrypto = require('browserid-crypto'),
 path = require('path');
 
 // I hate this.
-require("jwcrypto/lib/algs/rs");
-require("jwcrypto/lib/algs/ds");
+require("browserid-crypto/lib/algs/rs");
+require("browserid-crypto/lib/algs/ds");
 
 function IdP(args) {
   if (!args) args = {};

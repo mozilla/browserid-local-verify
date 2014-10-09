@@ -12,13 +12,7 @@ should = require('should'),
 BrowserID = require('../'),
 IdP = require('./lib/idp.js'),
 Client = require('./lib/client.js'),
-jwcrypto = require('jwcrypto'),
 async = require('async');
-
-// I hate this!  Algorithms should be loaded on demand without explicit
-// wonky requires by the client.
-require("jwcrypto/lib/algs/rs");
-require("jwcrypto/lib/algs/ds");
 
 describe('key size and type', function() {
   const keyTypes = [
