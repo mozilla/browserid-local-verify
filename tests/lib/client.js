@@ -8,10 +8,10 @@
 
 const
 async = require('async'),
-jwcrypto = require('jwcrypto');
+jwcrypto = require('browserid-crypto');
 
-require("jwcrypto/lib/algs/rs");
-require("jwcrypto/lib/algs/ds");
+require("browserid-crypto/lib/algs/rs");
+require("browserid-crypto/lib/algs/ds");
 
 function Client(args) {
   if (!args) args = {};
