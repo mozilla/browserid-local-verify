@@ -28,11 +28,11 @@ function IdP(args) {
   this.args = args;
   // default paramter values
   this.args.delay = this.args.delay || 0;
-  this.args.algorithm = this.args.algorithm || "rsa";
+  this.args.algorithm = this.args.algorithm || "RS";
   this.args.keysize = this.args.keysize || 128;
   this.args.delegation = this.args.delegation || null;
 
-  // allow algorithm specification as (i.e.) 'rsa' or 'RS'
+  // allow algorithm specification as (i.e.) 'rs' or 'RS'
   this.args.algorithm = this.args.algorithm.toUpperCase();
 
   if (args.wellKnown) this.wellKnown(args.wellKnown);

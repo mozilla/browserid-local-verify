@@ -16,11 +16,11 @@ async = require('async');
 
 describe('key size and type', function() {
   const keyTypes = [
-    { algorithm: 'rsa', keysize: 64 },
-    { algorithm: 'rsa', keysize: 128 },
-    { algorithm: 'rsa', keysize: 256 },
-    { algorithm: 'dsa', keysize: 128 },
-    { algorithm: 'dsa', keysize: 256 }
+    { algorithm: 'RS', keysize: 64 },
+    { algorithm: 'RS', keysize: 128 },
+    { algorithm: 'RS', keysize: 256 },
+    { algorithm: 'DS', keysize: 128 },
+    { algorithm: 'DS', keysize: 256 }
   ];
 
   // a local idp with a 1s delay in serving support documents

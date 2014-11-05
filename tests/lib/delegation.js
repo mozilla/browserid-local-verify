@@ -24,7 +24,7 @@ function stop(cb) {
 module.exports = function(num, cb) {
   async.times(num, function(x, done) {
     var idp = new IdP({
-      algorithm: 'dsa',
+      algorithm: 'DS',
       keysize: 128
     });
     idp.start(function(err) {
