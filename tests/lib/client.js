@@ -18,11 +18,11 @@ function Client(args) {
   this.args = args;
   this.args.idp = args.idp;
   this.args.email = args.email || 'test@' + args.idp.domain();
-  this.args.algorithm = this.args.algorithm || "dsa";
+  this.args.algorithm = this.args.algorithm || "DS";
   this.args.keysize = this.args.keysize || 128;
   this.args.delegation = this.args.delegation || null;
 
-  // allow algorithm specification as (i.e.) 'rsa' or 'RS'
+  // allow algorithm specification as (i.e.) 'rs' or 'RS'
   this.args.algorithm = this.args.algorithm.toUpperCase();
 }
 

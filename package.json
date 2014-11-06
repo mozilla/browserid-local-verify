@@ -2,7 +2,7 @@
   "author": "Lloyd <lloyd@hilaiel.com> (http://lloyd.io)",
   "name": "browserid-local-verify",
   "description": "A node.js verification library for local verification of BrowserID assertions.",
-  "version": "0.0.12",
+  "version": "0.1.0",
   "repository": {
     "url": "https://github.com/mozilla/browserid-local-verify"
   },
@@ -11,7 +11,7 @@
   },
   "main": "lib/browserid-local-verify",
   "dependencies": {
-    "browserid-crypto": "0.6.1",
+    "browserid-crypto": "0.7.0",
     "async": "0.2.9",
     "dbug": "0.4.1",
     "urlparse": "0.0.1",
