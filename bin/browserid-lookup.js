@@ -63,6 +63,9 @@ browserid.lookup(function(err, details) {
     if (argv.v) console.log("\n");
     // convert publicKey to displayable object
     details.publicKey = details.publicKey.toSimpleObject();
+    for (var i=0; i<details.publicKeys.length; i++) {
+      details.publicKeys[i] = details.publicKeys[i].toSimpleObject();
+    }
     console.log(details.authoritativeDomain.info, "is authoritative for", '@' + principalDomain.info, "email addresses:", JSON.stringify(details, null, 2).data);
   }
 });

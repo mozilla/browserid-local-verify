@@ -18,11 +18,60 @@ describe('.well-known lookup, malformed', function() {
 
   it('should handle bogus public key', function(done) {
     var x = idp.wellKnown();
-    x['public-key'].n += "bogus";
+    delete x['public-key'].n;
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
       (err).should.contain('mal-formed public key');
+
+      // repair well-known
+      idp.wellKnown(null);
+
+      done();
+    });
+  });
+
+  it('should handle missing public key', function(done) {
+    var x = idp.wellKnown();
+    delete x['public-key'];
+    idp.wellKnown(x);
+
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
+      (err).should.contain("missing required property 'keys' and/or 'public-key'");
+
+      // repair well-known
+      idp.wellKnown(null);
+
+      done();
+    });
+  });
+
+  it('should handle empty list of public keys', function(done) {
+    var x = idp.wellKnown();
+    x.keys = [];
+    delete x['public-key'];
+    idp.wellKnown(x);
+
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
+      (err).should.contain("missing required property 'keys' and/or 'public-key'");
+
+      // repair well-known
+      idp.wellKnown(null);
+
+      done();
+    });
+  });
+
+  it('should handle list of public keys', function(done) {
+    var x = idp.wellKnown();
+    x.keys = [x['public-key']];
+    delete x['public-key'];
+    idp.wellKnown(x);
+
+    browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err, details) {
+      should.not.exist(err);
+      (details.publicKeys.length).should.equal(1);
+      details.publicKey.should.equal(details.publicKeys[0]);
 
       // repair well-known
       idp.wellKnown(null);
