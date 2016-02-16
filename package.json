@@ -11,7 +11,7 @@
   },
   "main": "lib/browserid-local-verify",
   "dependencies": {
-    "browserid-crypto": "0.7.0",
+    "browserid-crypto": "git+https://github.com/mozilla/browserid-crypto#support-multiple-root-pubkeys",
     "async": "0.2.9",
     "dbug": "0.4.1",
     "urlparse": "0.0.1",
@@ -25,7 +25,7 @@
     "jshint": "2.3.0",
     "walk": "2.2.1",
     "temp": "0.5.1",
-    "ass": "0.0.4"
+    "ass": "git://github.com/jrgm/ass.git#5be99ee7abc9fcf63f9ebcc37b151b9c822146d1"
   },
   "scripts": {
     "test": "mocha -R spec tests/*.js"
