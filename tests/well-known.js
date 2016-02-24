@@ -116,7 +116,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain("paths must start with a slash");
+      (err).should.contain("must start with a slash");
 
       // repair well-known
       idp.wellKnown(null);
