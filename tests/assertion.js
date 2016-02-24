@@ -110,6 +110,50 @@ describe('assertion verification, basic', function() {
     });
   });
 
+  it('validation of assertion with parens in the email hostname should fail', function(done) {
+    client = new Client({
+      idp: idp,
+      email: 'test@(exam)ple.com'
+    });
+
+    // allocate a new "client".  She has an email and idp as specified below
+    // generate an assertion (and all pre-requisites)
+    client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
+      browserid.verify({
+        fallback: idp.domain(),
+        httpTimeout: 0.1,
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err) {
+        should.exist(err);
+        err.should.contain("untrusted assertion, doesn't contain an email, and issuer is untrusted");
+        done();
+      });
+    });
+  });
+
+  it('validation of assertion with aditional "@" symbols in the email should fail', function(done) {
+    client = new Client({
+      idp: idp,
+      email: 'test@users.example.com@example.com'
+    });
+
+    // allocate a new "client".  She has an email and idp as specified below
+    // generate an assertion (and all pre-requisites)
+    client.assertion({ audience: 'http://example.com' }, function(err, assertion) {
+      browserid.verify({
+        fallback: idp.domain(),
+        httpTimeout: 0.1,
+        assertion: assertion,
+        audience: 'http://example.com'
+      }, function(err) {
+        should.exist(err);
+        err.should.contain("untrusted assertion, doesn't contain an email, and issuer is untrusted");
+        done();
+      });
+    });
+  });
+
   it('test idp should shut down', function(done) {
     idp.stop(done);
   });
