@@ -46,7 +46,7 @@ describe('assertion verification, basic', function() {
   it('validation of basic assertion signed by Fallback should succeed', function(done) {
     client = new Client({
       idp: idp,
-      email: 'test@example,com'
+      email: 'test@nonprimary.example.com'
     });
 
     // allocate a new "client".  She has an email and idp as specified below

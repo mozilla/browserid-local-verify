@@ -14,7 +14,6 @@
     "browserid-crypto": "0.8.0",
     "async": "0.2.9",
     "dbug": "0.4.1",
-    "urlparse": "0.0.1",
     "optimist": "0.6.0",
     "colors": "0.6.2",
     "underscore": "~1.5.2"
