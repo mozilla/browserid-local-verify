@@ -2,7 +2,7 @@
   "author": "Lloyd <lloyd@hilaiel.com> (http://lloyd.io)",
   "name": "browserid-local-verify",
   "description": "A node.js verification library for local verification of BrowserID assertions.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "repository": {
     "url": "https://github.com/mozilla/browserid-local-verify"
   },
