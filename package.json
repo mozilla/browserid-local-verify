@@ -1,13 +1,14 @@
 {
-  "author": "Lloyd <lloyd@hilaiel.com> (http://lloyd.io)",
   "name": "browserid-local-verify",
   "description": "A node.js verification library for local verification of BrowserID assertions.",
   "version": "0.4.0",
   "repository": {
     "url": "https://github.com/mozilla/browserid-local-verify"
   },
+  "author": "Mozilla (https://mozilla.org/)",
+  "license": "MPL-2.0",
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.10"
   },
   "main": "lib/browserid-local-verify",
   "dependencies": {
@@ -19,15 +20,17 @@
     "underscore": "~1.8.3"
   },
   "devDependencies": {
+    "coveralls": "2.11.14",
+    "istanbul": "0.4.5",
+    "jshint": "2.9.3",
     "mocha": "3.1.0",
     "should": "11.1.0",
-    "jshint": "2.9.3",
-    "walk": "2.3.9",
     "temp": "0.8.3",
-    "ass": "git://github.com/jrgm/ass.git#5be99ee7abc9fcf63f9ebcc37b151b9c822146d1"
+    "walk": "2.3.9"
   },
   "scripts": {
-    "test": "mocha -R spec tests/*.js"
+    "test": "istanbul cover _mocha -- -R spec tests/*.js",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls"
   },
   "bin": {
     "browserid-lookup": "./bin/browserid-lookup.js"
