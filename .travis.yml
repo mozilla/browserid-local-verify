@@ -5,8 +5,16 @@ env:
     - TMPDIR=/tmp
 
 addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
   apt_packages:
     - libgmp-dev
+
+dist: trusty
+sudo: required
 
 node_js:
  - "0.10"
