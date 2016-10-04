@@ -30,7 +30,7 @@ describe('test idp implementation', function() {
     idp.wellKnown({ custom: true});
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain('support document missing');
+      (err).should.containEql('support document missing');
       done();
     });
   });

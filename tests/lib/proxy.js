@@ -13,7 +13,6 @@
 /* jshint curly: false */
 
 const
-async = require('async'),
 url = require('url'),
 http = require('http'),
 https = require('https');
