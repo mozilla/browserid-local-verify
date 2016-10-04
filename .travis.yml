@@ -17,8 +17,12 @@ dist: trusty
 sudo: required
 
 node_js:
- - "0.10"
- - "4"
+  - "0.10"
+  - "4"
+ 
+script:
+  - npm test
+  - COVERALLS_REPO_TOKEN=uVhUzByLbNQ0yLRqmFMO983nxZFGD55cf npm run report-coverage
 
 notifications:
   email:
