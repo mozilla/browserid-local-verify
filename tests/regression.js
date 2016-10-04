@@ -8,8 +8,6 @@
 const
 should = require('should'),
 BrowserID = require('../'),
-IdP = require('./lib/idp.js'),
-Client = require('./lib/client.js'),
 jwcrypto = require('browserid-crypto'),
 fs = require('fs'),
 path = require('path');

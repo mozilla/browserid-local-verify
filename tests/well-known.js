@@ -22,7 +22,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain('mal-formed public key');
+      (err).should.containEql('mal-formed public key');
 
       // repair well-known
       idp.wellKnown(null);
@@ -37,7 +37,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain("missing required property 'keys' and/or 'public-key'");
+      (err).should.containEql("missing required property 'keys' and/or 'public-key'");
 
       // repair well-known
       idp.wellKnown(null);
@@ -53,7 +53,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain("missing required property 'keys' and/or 'public-key'");
+      (err).should.containEql("missing required property 'keys' and/or 'public-key'");
 
       // repair well-known
       idp.wellKnown(null);
@@ -86,7 +86,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain("missing required property: 'provisioning'");
+      (err).should.containEql("missing required property: 'provisioning'");
 
       // repair well-known
       idp.wellKnown(null);
@@ -101,7 +101,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain("the authority is not a valid hostname");
+      (err).should.containEql("the authority is not a valid hostname");
 
       // repair well-known
       idp.wellKnown(null);
@@ -116,7 +116,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain("must start with a slash");
+      (err).should.containEql("must start with a slash");
 
       // repair well-known
       idp.wellKnown(null);
@@ -161,7 +161,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain('disabled must be either true or false');
+      (err).should.containEql('disabled must be either true or false');
 
       // repair well-known
       idp.wellKnown(null);
@@ -176,7 +176,7 @@ describe('.well-known lookup, malformed', function() {
     idp.wellKnown(x);
 
     browserid.lookup({ insecureSSL: true, domain: idp.domain() }, function(err) {
-      (err).should.contain('disabled must be either true or false');
+      (err).should.containEql('disabled must be either true or false');
 
       // repair well-known
       idp.wellKnown(null);

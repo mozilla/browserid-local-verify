@@ -9,7 +9,7 @@ url = require('url'),
 should = require('should'),
 BrowserID = require('../'),
 IdP = require('./lib/idp.js'),
-Proxy = require('./lib/proxy.js'),
+ProxyServer = require('./lib/proxy.js'),
 async = require('async');
 
 describe('.well-known lookup transport tests (HTTP)', function() {
@@ -51,7 +51,7 @@ describe('.well-known lookup transport tests (HTTP)', function() {
   });
 
   // A local proxy server.
-  var proxy = new Proxy();
+  var proxy = new ProxyServer();
 
   it('test servers should start up', function(done) {
     async.parallel([
@@ -111,7 +111,7 @@ describe('.well-known lookup transport tests (HTTP)', function() {
   it('should fail on wrong content type', function(done) {
     badContentType.lookup({ domain: redirectidp.domain() }, function(err) {
       should.exist(err);
-      (err).should.contain('non "application/json" response');
+      (err).should.containEql('non "application/json" response');
       done(null);
     });
   });

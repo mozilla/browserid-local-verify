@@ -7,7 +7,6 @@
 /* jshint curly: false */
 
 const
-async = require('async'),
 jwcrypto = require('browserid-crypto');
 
 require("browserid-crypto/lib/algs/rs");

@@ -50,7 +50,7 @@ describe('assertion time verification', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        (err).should.contain("expired");
+        (err).should.containEql("expired");
         done(null);
       });
     });
@@ -72,7 +72,7 @@ describe('assertion time verification', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        (err).should.contain("issued later");
+        (err).should.containEql("issued later");
         done(null);
       });
     });
@@ -96,7 +96,7 @@ describe('assertion time verification', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        (err).should.contain("expired");
+        (err).should.containEql("expired");
         done(null);
       });
     });
@@ -120,7 +120,7 @@ describe('assertion time verification', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        (err).should.contain("issued later than verification date");
+        (err).should.containEql("issued later than verification date");
         done(null);
       });
     });

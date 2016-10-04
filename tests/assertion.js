@@ -104,7 +104,7 @@ describe('assertion verification, basic', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        err.should.contain("untrusted assertion, doesn't contain an email, and issuer is untrusted");
+        err.should.containEql("untrusted assertion, doesn't contain an email, and issuer is untrusted");
         done();
       });
     });
@@ -126,7 +126,7 @@ describe('assertion verification, basic', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        err.should.contain("untrusted assertion, doesn't contain an email, and issuer is untrusted");
+        err.should.containEql("untrusted assertion, doesn't contain an email, and issuer is untrusted");
         done();
       });
     });
@@ -148,7 +148,7 @@ describe('assertion verification, basic', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        err.should.contain("untrusted assertion, doesn't contain an email, and issuer is untrusted");
+        err.should.containEql("untrusted assertion, doesn't contain an email, and issuer is untrusted");
         done();
       });
     });
@@ -170,7 +170,7 @@ describe('assertion verification, basic', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        err.should.contain("untrusted assertion, doesn't contain an email, and issuer is untrusted");
+        err.should.containEql("untrusted assertion, doesn't contain an email, and issuer is untrusted");
         done();
       });
     });
@@ -192,7 +192,7 @@ describe('assertion verification, basic', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        err.should.contain("untrusted assertion, doesn't contain an email, and issuer is untrusted");
+        err.should.containEql("untrusted assertion, doesn't contain an email, and issuer is untrusted");
         done();
       });
     });
@@ -214,7 +214,7 @@ describe('assertion verification, basic', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        err.should.contain("untrusted assertion, doesn't contain an email, and issuer is untrusted");
+        err.should.containEql("untrusted assertion, doesn't contain an email, and issuer is untrusted");
         done();
       });
     });
@@ -236,7 +236,7 @@ describe('assertion verification, basic', function() {
         audience: 'http://example.com'
       }, function(err) {
         should.exist(err);
-        err.should.contain("untrusted assertion, doesn't contain an email, and issuer is untrusted");
+        err.should.containEql("untrusted assertion, doesn't contain an email, and issuer is untrusted");
         done();
       });
     });
