@@ -29,8 +29,7 @@
     "walk": "2.3.9"
   },
   "scripts": {
-    "test": "istanbul cover _mocha -- -R spec tests/*.js",
-    "report-coverage": "cat ./coverage/lcov.info | coveralls"
+    "test": "istanbul cover _mocha -- -R spec tests/*.js"
   },
   "bin": {
     "browserid-lookup": "./bin/browserid-lookup.js"
