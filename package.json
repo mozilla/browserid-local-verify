@@ -1,7 +1,7 @@
 {
   "name": "browserid-local-verify",
   "description": "A node.js verification library for local verification of BrowserID assertions.",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "repository": {
     "url": "https://github.com/mozilla/browserid-local-verify"
   },
