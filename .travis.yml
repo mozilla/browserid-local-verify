@@ -17,8 +17,8 @@ dist: trusty
 sudo: required
 
 node_js:
-  - "0.10"
-  - "4"
+  - "8"
+  - "10"
  
 script:
   - npm test
