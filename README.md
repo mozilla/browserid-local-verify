@@ -22,7 +22,7 @@ This library is targeted at robust local verification, to subsume all of the fea
 
 # USAGE
 
-    npm install persona-verifier-lib
+    npm install browserid-local-verify
 
 ## (simple) verifying an assertion
 
